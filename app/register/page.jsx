@@ -1,0 +1,173 @@
+'use client';
+
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useAuth } from '@/context/AuthContext';
+
+const Register = () => {
+    const [formData, setFormData] = useState({
+        nombre: '',
+        apellido: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const { register } = useAuth();
+    const router = useRouter();
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+
+        if (!formData.nombre || !formData.apellido || !formData.email || !formData.password || !formData.confirmPassword) {
+            setError('Por favor, completa todos los campos');
+            setLoading(false);
+            return;
+        }
+
+        if (formData.password.length < 6) {
+            setError('La contraseña debe tener al menos 6 caracteres');
+            setLoading(false);
+            return;
+        }
+
+        if (formData.password !== formData.confirmPassword) {
+            setError('Las contraseñas no coinciden');
+            setLoading(false);
+            return;
+        }
+
+        const result = await register(
+            formData.nombre,
+            formData.apellido,
+            formData.email,
+            formData.password
+        );
+
+        if (result.success) {
+            router.push('/');
+        } else {
+            setError(result.message);
+        }
+
+        setLoading(false);
+    };
+
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#efdfc2] to-[#d4c9b3] p-5">
+            <div className="bg-white rounded-3xl shadow-2xl p-12 max-w-lg w-full">
+                <div className="text-center mb-10">
+                    <h1 className="text-4xl font-bold text-gray-800 mb-3">Crear Cuenta</h1>
+                    <p className="text-gray-500 text-base">Únete a la comunidad Motivem</p>
+                </div>
+
+                <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                    {error && (
+                        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600 text-sm flex items-center gap-3">
+                            <span className="text-lg">⚠️</span>
+                            {error}
+                        </div>
+                    )}
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="flex flex-col gap-2">
+                            <label className="text-sm font-semibold text-gray-800">Nombre</label>
+                            <input
+                                type="text"
+                                name="nombre"
+                                value={formData.nombre}
+                                onChange={handleChange}
+                                placeholder="Tu nombre"
+                                className="p-4 text-base border-2 border-gray-200 rounded-xl outline-none transition-all duration-300 focus:border-[#94a3b8] focus:ring-2 focus:ring-[#94a3b8]/20"
+                                disabled={loading}
+                            />
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            <label className="text-sm font-semibold text-gray-800">Apellido</label>
+                            <input
+                                type="text"
+                                name="apellido"
+                                value={formData.apellido}
+                                onChange={handleChange}
+                                placeholder="Tu apellido"
+                                className="p-4 text-base border-2 border-gray-200 rounded-xl outline-none transition-all duration-300 focus:border-[#94a3b8] focus:ring-2 focus:ring-[#94a3b8]/20"
+                                disabled={loading}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-semibold text-gray-800">Email</label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="tu@email.com"
+                            className="p-4 text-base border-2 border-gray-200 rounded-xl outline-none transition-all duration-300 focus:border-[#94a3b8] focus:ring-2 focus:ring-[#94a3b8]/20"
+                            disabled={loading}
+                        />
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-semibold text-gray-800">Contraseña</label>
+                        <input
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="Mínimo 6 caracteres"
+                            className="p-4 text-base border-2 border-gray-200 rounded-xl outline-none transition-all duration-300 focus:border-[#94a3b8] focus:ring-2 focus:ring-[#94a3b8]/20"
+                            disabled={loading}
+                        />
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-semibold text-gray-800">Confirmar Contraseña</label>
+                        <input
+                            type="password"
+                            name="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
+                            placeholder="Repite tu contraseña"
+                            className="p-4 text-base border-2 border-gray-200 rounded-xl outline-none transition-all duration-300 focus:border-[#94a3b8] focus:ring-2 focus:ring-[#94a3b8]/20"
+                            disabled={loading}
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        className={`mt-3 p-4 text-base font-semibold text-white bg-gradient-to-r from-[#94a3b8] to-[#64748b] rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-[1.02] ${loading ? 'opacity-60 cursor-not-allowed' : ''}`}
+                        disabled={loading}
+                    >
+                        {loading ? 'Creando cuenta...' : 'Crear Cuenta'}
+                    </button>
+
+                    <div className="text-center mt-5">
+                        <p className="text-sm text-gray-500">
+                            ¿Ya tienes cuenta?{' '}
+                            <Link href="/login" className="text-[#94a3b8] font-semibold hover:text-[#64748b] transition-colors">
+                                Inicia sesión aquí
+                            </Link>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    );
+};
+
+export default Register;

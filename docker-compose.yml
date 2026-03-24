@@ -1,0 +1,45 @@
+services:
+  # ─── Next.js App (Frontend + Backend unificado) ───
+  app:
+    build: .
+    container_name: next_app
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - MONGODB_URI=mongodb://mongo-next:27017/motivem-dataBase
+      - JWT_SECRET=fd0616565c0d0001f38dcf22faf3e6cb
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - mongo-next
+    restart: unless-stopped
+    command: "sh -c \"echo '\\n\\n🚀 Next.js App disponible en: http://localhost:3000\\n🚀 Mongo Express (Base de datos) disponible en: http://localhost:8082\\n\\n' && npm run dev\""
+
+  # ─── MongoDB Local ───
+  mongo-next:
+    image: mongo:6
+    container_name: next_mongo_db
+    ports:
+      - "27019:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+  # ─── Mongo Express (Interfaz web para MongoDB) ───
+  mongo-express-next:
+    image: mongo-express
+    container_name: next_mongo_express
+    ports:
+      - "8082:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo-next
+    depends_on:
+      - mongo-next
+    restart: unless-stopped
+
+volumes:
+  mongo_data:

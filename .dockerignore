@@ -1,0 +1,23 @@
+# Dependencias (Docker las instalará por su cuenta dentro)
+node_modules
+npm-debug.log
+
+# Build de Next.js
+.next
+out
+
+# Control de versiones
+.git
+.gitignore
+
+# Archivos de sistema y entorno
+.env
+.env.local
+.env*.local
+.dockerignore
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Docker logs
+docker-compose.override.yml
