@@ -41,10 +41,10 @@ const DescargarPDF = () => {
   };
 
   return (
-    <div>
+    <div className="flex justify-center w-full mt-6">
       <button
         onClick={descargarPDF}
-        className="px-6 py-3 text-base font-semibold text-white bg-gradient-to-r from-[#94a3b8] to-[#64748b] rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300"
+        className="px-6 py-3 text-base font-semibold text-white bg-[#cfa248] rounded-xl hover:bg-[#bf7b56] hover:shadow-lg hover:scale-105 transition-all duration-300"
       >
         📄 Descargar PDF
       </button>
@@ -67,21 +67,21 @@ const DescargarPDF = () => {
 
             <div className="text-6xl mb-5">🔒</div>
 
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">Acceso Restringido</h2>
-            <p className="text-base text-gray-500 mb-8 leading-relaxed">
+            <h2 className="text-3xl font-bold text-[#6e9277] mb-4">Acceso Restringido</h2>
+            <p className="text-base text-black/60 mb-8 leading-relaxed">
               Para descargar el PDF necesitas tener una cuenta en Motivem
             </p>
 
             <div className="flex flex-col gap-3 mb-5">
               <Link
                 href="/login"
-                className="px-6 py-4 text-base font-semibold text-white bg-gradient-to-r from-[#94a3b8] to-[#64748b] rounded-xl hover:shadow-lg hover:scale-[1.02] transition-all duration-300 no-underline"
+                className="px-6 py-4 text-base font-semibold text-white bg-[#cfa248] rounded-xl hover:bg-[#bf7b56] hover:shadow-lg hover:scale-[1.02] transition-all duration-300 no-underline text-center"
               >
                 Iniciar Sesión
               </Link>
               <Link
                 href="/register"
-                className="px-6 py-4 text-base font-semibold text-[#94a3b8] bg-white border-2 border-[#94a3b8] rounded-xl hover:bg-[#94a3b8] hover:text-white transition-all duration-300 no-underline"
+                className="px-6 py-4 text-base font-semibold text-[#6e9277] bg-white border-2 border-[#6e9277] rounded-xl hover:bg-[#6e9277] hover:text-white transition-all duration-300 no-underline text-center"
               >
                 Crear Cuenta
               </Link>

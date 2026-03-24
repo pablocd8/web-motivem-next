@@ -4,10 +4,12 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Phone } from "lucide-react";
 import Link from 'next/link';
+import { useAuth } from '@/context/AuthContext';
 
 const Header = ({ showLogo = true }) => {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { isAuthenticated, logout } = useAuth();
 
   const menuItems = [
     { label: 'SERVICIOS', color: '#6e9277', route: '/servicios' },
@@ -43,6 +45,24 @@ const Header = ({ showLogo = true }) => {
             Solicitar cita
           </button>
         </Link>
+        
+        {isAuthenticated ? (
+          <button
+            onClick={() => {
+              logout();
+              router.push('/');
+            }}
+            className="border-2 border-[#6e9277] text-[#6e9277] bg-transparent hover:bg-[#6e9277] hover:text-white text-base px-5 py-1.5 rounded transition cursor-pointer"
+          >
+            Cerrar sesión
+          </button>
+        ) : (
+          <Link href="/login">
+            <button className="border-2 border-[#6e9277] text-[#6e9277] bg-transparent hover:bg-[#6e9277] hover:text-white text-base px-5 py-1.5 rounded transition cursor-pointer">
+              Iniciar sesión
+            </button>
+          </Link>
+        )}
       </div>
 
       {/* Menú horizontal */}

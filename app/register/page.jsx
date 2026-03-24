@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -66,107 +68,111 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#efdfc2] to-[#d4c9b3] p-5">
-            <div className="bg-white rounded-3xl shadow-2xl p-12 max-w-lg w-full">
-                <div className="text-center mb-10">
-                    <h1 className="text-4xl font-bold text-gray-800 mb-3">Crear Cuenta</h1>
-                    <p className="text-gray-500 text-base">Únete a la comunidad Motivem</p>
+        <>
+            <Header />
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#efdfc2] to-[#d4c9b3] p-5">
+                <div className="bg-[#efdfc2] rounded-3xl shadow-2xl p-12 max-w-lg w-full ">
+                    <div className="text-center mb-10">
+                        <h1 className="text-4xl font-bold text-[#6e9277] mb-3">Crear Cuenta</h1>
+                        <p className="text-[#94a3b8] text-base">Únete a la comunidad Motivem</p>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-5 ">
+                        {error && (
+                            <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600 text-sm flex items-center gap-3">
+                                <span className="text-lg">⚠️</span>
+                                {error}
+                            </div>
+                        )}
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="flex flex-col gap-2">
+                                <label className="text-sm font-semibold text-[#6e9277]">Nombre</label>
+                                <input
+                                    type="text"
+                                    name="nombre"
+                                    value={formData.nombre}
+                                    onChange={handleChange}
+                                    placeholder="Tu nombre"
+                                    className="p-4 text-base text-black/40 border-2 border-[#cfa248]/50 placeholder-black/40 rounded-xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/20"
+                                    disabled={loading}
+                                />
+                            </div>
+
+                            <div className="flex flex-col gap-2">
+                                <label className="text-sm font-semibold text-[#6e9277]">Apellido</label>
+                                <input
+                                    type="text"
+                                    name="apellido"
+                                    value={formData.apellido}
+                                    onChange={handleChange}
+                                    placeholder="Tu apellido"
+                                    className="p-4 text-base text-black/40 border-2 border-[#cfa248]/50 placeholder-black/40 rounded-xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/20"
+                                    disabled={loading}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            <label className="text-sm font-semibold text-[#6e9277]">Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                placeholder="tu@email.com"
+                                className="p-4 text-base text-black/40 border-2 border-[#cfa248]/50 placeholder-black/40 rounded-xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/20"
+                                disabled={loading}
+                            />
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            <label className="text-sm font-semibold text-[#6e9277]">Contraseña</label>
+                            <input
+                                type="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                placeholder="Mínimo 6 caracteres"
+                                className="p-4 text-base text-black/40 border-2 border-[#cfa248]/50 placeholder-black/40 rounded-xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/20"
+                                disabled={loading}
+                            />
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                            <label className="text-sm font-semibold text-[#6e9277]">Confirmar Contraseña</label>
+                            <input
+                                type="password"
+                                name="confirmPassword"
+                                value={formData.confirmPassword}
+                                onChange={handleChange}
+                                placeholder="Repite tu contraseña"
+                                className="p-4 text-base text-black/40 border-2 border-[#cfa248]/50 placeholder-black/40 rounded-xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/20"
+                                disabled={loading}
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            className={`mt-3 p-4 text-base font-semibold text-white bg-[#cfa248] hover:bg-[#bf7b56] rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-[1.02] ${loading ? 'opacity-60 cursor-not-allowed' : ''}`}
+                            disabled={loading}
+                        >
+                            {loading ? 'Creando cuenta...' : 'Crear Cuenta'}
+                        </button>
+
+                        <div className="text-center mt-5">
+                            <p className="text-sm text-[#94a3b8]">
+                                ¿Ya tienes cuenta?{' '}
+                                <Link href="/login" className="text-[#cfa248] font-semibold hover:text-[#bf7b56] transition-colors">
+                                    Inicia sesión aquí
+                                </Link>
+                            </p>
+                        </div>
+                    </form>
                 </div>
-
-                <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                    {error && (
-                        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600 text-sm flex items-center gap-3">
-                            <span className="text-lg">⚠️</span>
-                            {error}
-                        </div>
-                    )}
-
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="flex flex-col gap-2">
-                            <label className="text-sm font-semibold text-gray-800">Nombre</label>
-                            <input
-                                type="text"
-                                name="nombre"
-                                value={formData.nombre}
-                                onChange={handleChange}
-                                placeholder="Tu nombre"
-                                className="p-4 text-base border-2 border-gray-200 rounded-xl outline-none transition-all duration-300 focus:border-[#94a3b8] focus:ring-2 focus:ring-[#94a3b8]/20"
-                                disabled={loading}
-                            />
-                        </div>
-
-                        <div className="flex flex-col gap-2">
-                            <label className="text-sm font-semibold text-gray-800">Apellido</label>
-                            <input
-                                type="text"
-                                name="apellido"
-                                value={formData.apellido}
-                                onChange={handleChange}
-                                placeholder="Tu apellido"
-                                className="p-4 text-base border-2 border-gray-200 rounded-xl outline-none transition-all duration-300 focus:border-[#94a3b8] focus:ring-2 focus:ring-[#94a3b8]/20"
-                                disabled={loading}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                        <label className="text-sm font-semibold text-gray-800">Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            placeholder="tu@email.com"
-                            className="p-4 text-base border-2 border-gray-200 rounded-xl outline-none transition-all duration-300 focus:border-[#94a3b8] focus:ring-2 focus:ring-[#94a3b8]/20"
-                            disabled={loading}
-                        />
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                        <label className="text-sm font-semibold text-gray-800">Contraseña</label>
-                        <input
-                            type="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            placeholder="Mínimo 6 caracteres"
-                            className="p-4 text-base border-2 border-gray-200 rounded-xl outline-none transition-all duration-300 focus:border-[#94a3b8] focus:ring-2 focus:ring-[#94a3b8]/20"
-                            disabled={loading}
-                        />
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                        <label className="text-sm font-semibold text-gray-800">Confirmar Contraseña</label>
-                        <input
-                            type="password"
-                            name="confirmPassword"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
-                            placeholder="Repite tu contraseña"
-                            className="p-4 text-base border-2 border-gray-200 rounded-xl outline-none transition-all duration-300 focus:border-[#94a3b8] focus:ring-2 focus:ring-[#94a3b8]/20"
-                            disabled={loading}
-                        />
-                    </div>
-
-                    <button
-                        type="submit"
-                        className={`mt-3 p-4 text-base font-semibold text-white bg-gradient-to-r from-[#94a3b8] to-[#64748b] rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-[1.02] ${loading ? 'opacity-60 cursor-not-allowed' : ''}`}
-                        disabled={loading}
-                    >
-                        {loading ? 'Creando cuenta...' : 'Crear Cuenta'}
-                    </button>
-
-                    <div className="text-center mt-5">
-                        <p className="text-sm text-gray-500">
-                            ¿Ya tienes cuenta?{' '}
-                            <Link href="/login" className="text-[#94a3b8] font-semibold hover:text-[#64748b] transition-colors">
-                                Inicia sesión aquí
-                            </Link>
-                        </p>
-                    </div>
-                </form>
             </div>
-        </div>
+            <Footer />
+        </>
     );
 };
 
