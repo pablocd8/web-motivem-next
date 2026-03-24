@@ -28,6 +28,7 @@ const CarruselReseñas = () => {
       <section className="py-12 -mt-65">
         <div className="max-w-4xl mx-auto px-4">
           <Swiper
+            style={{ '--swiper-navigation-color': 'rgba(255, 255, 255, 0.5)' }}
             modules={[Navigation, Pagination, A11y, Autoplay]}
             spaceBetween={50}
             slidesPerView={1}

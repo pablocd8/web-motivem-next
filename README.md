@@ -1,6 +1,5 @@
 # 🌟 Motivem Web App
 
-
 <div align="center">
   <br />
   <strong>[Ver Demo en Vivo](https://web-motivem-next.vercel.app/)</strong>
@@ -47,14 +46,41 @@ npm install
 # (Copia la plantilla y la renombra a .env.local para que Git no la rastree)
 cp .env.example .env.local
 
-# 4. Levantar la base de datos de pruebas (MongoDB + MongoExpress en segundo plano)
-docker-compose up -d
-
-# 5. Ejecutar la aplicación en modo desarrollo con turbopack
-npm run dev
+# 4. Levantar la base de datos de pruebas Y el servidor Next.js
+# Esto ejecuta todo junto en segundo plano
+docker-compose up -d  
 ```
 La aplicación estará disponible de inmediato en **[http://localhost:3000](http://localhost:3000)**.
 
+---
+
+## 🌎 Despliegue en Producción (Vercel + MongoDB Atlas)
+
+El entorno de producción se gestiona íntegramente de forma visual Serverless, sin necesidad de tocar código ni variables locales en tu ordenador.
+
+### Paso 1: Desplegar el Código
+1. Entra en [Vercel](https://vercel.com/) y haz clic en **Add New... > Project**.
+2. Selecciona este repositorio de GitHub (`web-motivem-next`) y dale a **Import**.
+3. Haz clic en **Deploy** (La web subirá, pero dará error porque aún no tiene base de datos).
+
+### Paso 2: Configurar MongoDB Atlas (Oficial)
+Para que la web guarde los usuarios reales, utilizaremos la integración oficial de Base de Datos:
+1. En el panel de tu proyecto en Vercel, ve a la pestaña superior llamada **Storage**.
+2. Busca la opción **MongoDB Atlas** y haz clic en **Connect**.
+3. Sigue los pasos para iniciar sesión con tu cuenta de Google/MongoDB. Vercel creará un clúster gratuito automáticamente.
+4. *¡Magia!* Vercel creará e inyectará automáticamente la variable secreta de conexión (`MONGODB_URL`) en tu proyecto sin que tú la veas.
+
+### Paso 3: Configurar Seguridad (OBLIGATORIO)
+1. Ve a la pestaña **Settings > Environment Variables** en Vercel.
+2. Añade manualmente tu clave de encriptación para los inicios de sesión:
+   * **Key**: `JWT_SECRET`
+   * **Value**: *(Escribe aquí una contraseña larga y difícil)*
+3. Dale a **Save**.
+
+### Paso 4: Publicar
+Ve a la pestaña **Deployments**, haz clic en los tres puntos del último despliegue y selecciona **Redeploy**. ¡Tu web y base de datos ya están conectadas y en vivo!
+
+---
 
 ## 📁 Estructura del Código
 
@@ -102,6 +128,5 @@ web-motivem-next/
 Desarrollado como Proyecto Final de **DAW (Desarrollo de Aplicaciones Web)**.
 
 **Autor:** Pablo C. D.
-
 
 Este proyecto está bajo la Licencia **MIT**.
