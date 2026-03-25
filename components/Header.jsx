@@ -25,7 +25,7 @@ const Header = ({ showLogo = true }) => {
     >
       {/* Botón de menú móvil */}
       <button
-        className="md:hidden absolute top-6 left-6 z-20"
+        className="md:hidden absolute top-6 left-4 md:left-6 z-20"
         onClick={() => setMenuOpen(!menuOpen)}
         aria-label="Abrir menú"
       >
@@ -35,30 +35,30 @@ const Header = ({ showLogo = true }) => {
       </button>
 
       {/* Teléfono y CTA */}
-      <div className="absolute top-6 right-6 z-20 flex items-center gap-4 font-medium text-[#8b5e3b]">
-        <span className="flex items-center gap-1 text-base">
+      <div className="absolute top-6 right-3 md:right-6 z-20 flex items-center gap-2 md:gap-4 font-medium text-[#8b5e3b]">
+        <span className="hidden md:flex items-center gap-1 text-base">
           <Phone className="w-5 h-5 text-black" />
           644 54 27 90
         </span>
         <Link href="/contacto">
-          <button className="bg-[#cfa248] text-white text-base px-5 py-2 rounded shadow hover:bg-[#bf7b56] transition cursor-pointer">
+          <button className="bg-[#cfa248] text-white text-[13px] md:text-base px-3 py-2 md:px-5 md:py-2 rounded shadow hover:bg-[#bf7b56] transition cursor-pointer whitespace-nowrap">
             Solicitar cita
           </button>
         </Link>
-        
+
         {isAuthenticated ? (
           <button
             onClick={() => {
               logout();
               router.push('/');
             }}
-            className="border-2 border-[#6e9277] text-[#6e9277] bg-transparent hover:bg-[#6e9277] hover:text-white text-base px-5 py-1.5 rounded transition cursor-pointer"
+            className="border-2 border-[#6e9277] text-[#6e9277] bg-transparent hover:bg-[#6e9277] hover:text-white text-[13px] md:text-base px-3 py-1.5 md:px-5 md:py-1.5 rounded transition cursor-pointer whitespace-nowrap"
           >
             Cerrar sesión
           </button>
         ) : (
           <Link href="/login">
-            <button className="border-2 border-[#6e9277] text-[#6e9277] bg-transparent hover:bg-[#6e9277] hover:text-white text-base px-5 py-1.5 rounded transition cursor-pointer">
+            <button className="border-2 border-[#6e9277] text-[#6e9277] bg-transparent hover:bg-[#6e9277] hover:text-white text-[13px] md:text-base px-3 py-1.5 md:px-5 md:py-1.5 rounded transition cursor-pointer whitespace-nowrap">
               Iniciar sesión
             </button>
           </Link>
@@ -94,7 +94,7 @@ const Header = ({ showLogo = true }) => {
             </button>
 
             <div className="mt-12 flex flex-col gap-4">
-              <img src="/logo-motivem-color.png" alt="Logo Motivem" className="block" />
+              <img src="/logo-motivem-color.png" alt="Logo Motivem" className="block mb-4" />
               {menuItems.map(({ label, color, route }) => (
                 <button
                   key={label}
@@ -102,12 +102,20 @@ const Header = ({ showLogo = true }) => {
                     setMenuOpen(false);
                     router.push(route);
                   }}
-                  className="text-base py-2 rounded mb-2 cursor-pointer"
+                  className="text-base py-2 rounded mb-1 cursor-pointer"
                   style={{ backgroundColor: color, color: '#fff' }}
                 >
                   {label}
                 </button>
               ))}
+
+              {/* Elementos de contacto para móvil */}
+              <div className="w-full h-px bg-[#d4c3a3] my-2"></div>
+
+              <span className="flex items-center gap-2 text-base font-medium text-[#8b5e3b] justify-center mb-2">
+                <Phone className="w-5 h-5 text-black" />
+                644 54 27 90
+              </span>
             </div>
           </div>
           <div className="flex-1" onClick={() => setMenuOpen(false)} />
