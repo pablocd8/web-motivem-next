@@ -9,7 +9,7 @@ import { useAuth } from '@/context/AuthContext';
 const Header = ({ showLogo = true }) => {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
 
   const menuItems = [
     { label: 'SERVICIOS', color: '#6e9277', route: '/servicios' },
@@ -40,11 +40,19 @@ const Header = ({ showLogo = true }) => {
           <Phone className="w-5 h-5 text-black" />
           644 54 27 90
         </span>
-        <Link href="/contacto">
+        <Link href="/solicitar-cita">
           <button className="bg-[#cfa248] text-white text-[13px] md:text-base px-3 py-2 md:px-5 md:py-2 rounded shadow hover:bg-[#bf7b56] transition cursor-pointer whitespace-nowrap">
             Solicitar cita
           </button>
         </Link>
+
+        {isAuthenticated && user?.rol === 'admin' && (
+          <Link href="/admin/citas">
+            <button className="bg-[#76937c] text-white text-[13px] md:text-base px-3 py-2 md:px-5 md:py-2 rounded shadow hover:bg-[#3a473d] transition cursor-pointer whitespace-nowrap">
+              Panel de Control
+            </button>
+          </Link>
+        )}
 
         {isAuthenticated ? (
           <button
@@ -108,9 +116,22 @@ const Header = ({ showLogo = true }) => {
                   {label}
                 </button>
               ))}
-
               {/* Elementos de contacto para móvil */}
               <div className="w-full h-px bg-[#d4c3a3] my-2"></div>
+
+              {isAuthenticated && user?.rol === 'admin' && (
+                <Link href="/admin/citas" onClick={() => setMenuOpen(false)} className="w-full">
+                  <button className="w-full bg-[#76937c] text-white py-3 rounded-lg font-bold shadow-md hover:bg-[#3a473d] transition mb-2 uppercase text-sm tracking-wider">
+                    Panel de Control
+                  </button>
+                </Link>
+              )}
+
+              <Link href="/solicitar-cita" onClick={() => setMenuOpen(false)} className="w-full">
+                <button className="w-full bg-[#cfa248] text-white py-3 rounded-lg font-bold shadow-md hover:bg-[#bf7b56] transition mb-2 uppercase text-sm tracking-wider">
+                  Solicitar cita
+                </button>
+              </Link>
 
               <span className="flex items-center gap-2 text-base font-medium text-[#8b5e3b] justify-center mb-2">
                 <Phone className="w-5 h-5 text-black" />

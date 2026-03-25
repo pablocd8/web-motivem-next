@@ -63,7 +63,8 @@ export async function POST(request) {
         id: nuevoUsuario._id,
         nombre: nuevoUsuario.nombre,
         apellido: nuevoUsuario.apellido,
-        email: nuevoUsuario.email
+        email: nuevoUsuario.email,
+        rol: nuevoUsuario.rol
       }
     }, { status: 201 });
 
