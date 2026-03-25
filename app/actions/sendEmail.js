@@ -2,9 +2,8 @@
 
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function sendEmail(formData) {
+  const resend = new Resend(process.env.RESEND_API_KEY || 'temp_key_for_build');
   console.log('--- Intentando enviar email ---');
   console.log('RESEND_API_KEY exists:', !!process.env.RESEND_API_KEY);
   const nombre = formData.get('nombre');
