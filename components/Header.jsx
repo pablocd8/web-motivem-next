@@ -101,8 +101,8 @@ const Header = ({ showLogo = true }) => {
               </svg>
             </button>
 
-            <div className="mt-12 flex flex-col gap-4">
-              <img src="/logo-motivem-color.png" alt="Logo Motivem" className="block mb-4" />
+            <div className="mt-12 flex flex-col gap-3">
+              <img src="/logo-motivem-color.png" alt="Logo Motivem" className="block mb-4 max-w-[150px] mx-auto" />
               {menuItems.map(({ label, color, route }) => (
                 <button
                   key={label}
@@ -110,33 +110,55 @@ const Header = ({ showLogo = true }) => {
                     setMenuOpen(false);
                     router.push(route);
                   }}
-                  className="text-base py-2 rounded mb-1 cursor-pointer"
+                  className="text-sm py-3 rounded-lg font-bold uppercase tracking-wider cursor-pointer shadow-sm active:scale-95 transition-all"
                   style={{ backgroundColor: color, color: '#fff' }}
                 >
                   {label}
                 </button>
               ))}
-              {/* Elementos de contacto para móvil */}
-              <div className="w-full h-px bg-[#d4c3a3] my-2"></div>
+              
+              <div className="w-full h-px bg-[#d4c3a3] my-4"></div>
 
               {isAuthenticated && user?.rol === 'admin' && (
                 <Link href="/admin/citas" onClick={() => setMenuOpen(false)} className="w-full">
-                  <button className="w-full bg-[#76937c] text-white py-3 rounded-lg font-bold shadow-md hover:bg-[#3a473d] transition mb-2 uppercase text-sm tracking-wider">
-                    Panel de Control
+                  <button className="w-full bg-[#76937c] text-white py-4 rounded-xl font-black shadow-lg hover:bg-[#3a473d] transition-all uppercase text-xs tracking-[0.2em]">
+                    ⚙️ PANEL DE CONTROL
                   </button>
                 </Link>
               )}
 
               <Link href="/solicitar-cita" onClick={() => setMenuOpen(false)} className="w-full">
-                <button className="w-full bg-[#cfa248] text-white py-3 rounded-lg font-bold shadow-md hover:bg-[#bf7b56] transition mb-2 uppercase text-sm tracking-wider">
-                  Solicitar cita
+                <button className="w-full bg-[#cfa248] text-white py-4 rounded-xl font-black shadow-lg hover:bg-[#bf7b56] transition-all uppercase text-xs tracking-[0.2em]">
+                  📅 SOLICITAR CITA
                 </button>
               </Link>
 
-              <span className="flex items-center gap-2 text-base font-medium text-[#8b5e3b] justify-center mb-2">
-                <Phone className="w-5 h-5 text-black" />
-                644 54 27 90
-              </span>
+              {isAuthenticated ? (
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    logout();
+                    router.push('/');
+                  }}
+                  className="w-full border-2 border-[#6e9277] text-[#6e9277] py-3 rounded-xl font-bold uppercase text-xs tracking-widest hover:bg-[#6e9277] hover:text-white transition-all mt-2"
+                >
+                  Cerrar Sesión
+                </button>
+              ) : (
+                <Link href="/login" onClick={() => setMenuOpen(false)}>
+                  <button className="w-full border-2 border-[#6e9277] text-[#6e9277] py-3 rounded-xl font-bold uppercase text-xs tracking-widest hover:bg-[#6e9277] hover:text-white transition-all mt-2">
+                    Iniciar Sesión
+                  </button>
+                </Link>
+              )}
+
+              <div className="mt-6 flex flex-col items-center gap-2">
+                <span className="text-[10px] text-[#8b5e3b] font-bold uppercase tracking-widest opacity-60">Contacto directo</span>
+                <span className="flex items-center gap-2 text-lg font-black text-[#5a6a5d]">
+                  <Phone className="w-5 h-5 text-[#cfa248]" />
+                  644 54 27 90
+                </span>
+              </div>
             </div>
           </div>
           <div className="flex-1" onClick={() => setMenuOpen(false)} />
