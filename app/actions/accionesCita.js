@@ -89,7 +89,7 @@ export async function crearCita(formData) {
     emailData.set('apellidos', '(Reserva)');
     emailData.set('email', email);
     emailData.set('telefono', telefono);
-    const mensaje = `✨ Cita confirmada para ${servicio} el día ${fechaCita.toLocaleDateString('es-ES', { timeZone: 'Europe/Madrid' })} a las ${fechaCita.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid' })}. ✅`;
+    const mensaje = `Cita confirmada para ${servicio} el día ${fechaCita.toLocaleDateString('es-ES', { timeZone: 'Europe/Madrid' })} a las ${fechaCita.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid' })}.`;
     emailData.set('mensaje', mensaje);
     
     await sendEmail(emailData);

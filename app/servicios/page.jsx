@@ -3,6 +3,11 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Formulario from "@/components/Formulario";
 
+export const metadata = {
+  title: "Nuestros Servicios de Psicología y Aprendizaje",
+  description: "Explora nuestros servicios de psicoterapia, dificultades de aprendizaje, orientación familiar y talleres en Valencia.",
+};
+
 export default function Servicios() {
     return (
         <>
