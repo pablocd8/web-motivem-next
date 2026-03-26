@@ -47,7 +47,7 @@ const Header = ({ showLogo = true }) => {
         </Link>
 
         {isAuthenticated && user?.rol === 'admin' && (
-          <Link href="/admin/citas">
+          <Link href="/admin/citas" className="hidden md:block">
             <button className="bg-[#76937c] text-white text-[13px] md:text-base px-3 py-2 md:px-5 md:py-2 rounded shadow hover:bg-[#3a473d] transition cursor-pointer whitespace-nowrap">
               Panel de Control
             </button>
@@ -116,7 +116,7 @@ const Header = ({ showLogo = true }) => {
                   {label}
                 </button>
               ))}
-              
+
               <div className="w-full h-px bg-[#d4c3a3] my-4"></div>
 
               {isAuthenticated && user?.rol === 'admin' && (
@@ -133,18 +133,7 @@ const Header = ({ showLogo = true }) => {
                 </button>
               </Link>
 
-              {isAuthenticated ? (
-                <button
-                  onClick={() => {
-                    setMenuOpen(false);
-                    logout();
-                    router.push('/');
-                  }}
-                  className="w-full border-2 border-[#6e9277] text-[#6e9277] py-3 rounded-xl font-bold uppercase text-xs tracking-widest hover:bg-[#6e9277] hover:text-white transition-all mt-2"
-                >
-                  Cerrar Sesión
-                </button>
-              ) : (
+              {!isAuthenticated && (
                 <Link href="/login" onClick={() => setMenuOpen(false)}>
                   <button className="w-full border-2 border-[#6e9277] text-[#6e9277] py-3 rounded-xl font-bold uppercase text-xs tracking-widest hover:bg-[#6e9277] hover:text-white transition-all mt-2">
                     Iniciar Sesión

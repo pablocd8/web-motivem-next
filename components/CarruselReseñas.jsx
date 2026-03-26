@@ -51,7 +51,7 @@ const CarruselReseñas = () => {
 
           <div className="text-center mt-8">
             <a
-              href="https://www.google.com/search?...#lkt=LocalPoiReviews"
+              href="https://share.google/rHdUAeBxOJRN5Ahxc"
               className="inline-block px-6 py-2 border border-[#6e9277] text-[#6e9277] hover:bg-[#6e9277] hover:text-white transition-colors duration-300 cursor-pointer rounded"
               target="_blank"
               rel="noopener noreferrer"
