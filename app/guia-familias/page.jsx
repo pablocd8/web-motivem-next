@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import DescargarPDF from "@/components/DescargarPDF";
@@ -11,7 +12,14 @@ export default function GuiaFamilias() {
                 <div className="max-w-6xl mx-auto px-6 md:px-10 pt-0 pb-8">
                     <div className="flex flex-col items-center mb-8">
                         <Link href="/">
-                            <img src="/guia-familias-letrero.png" alt="Guía para Familias" className="w-[500px] max-w-full h-auto transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer" />
+                            <Image 
+                                src="/guia-familias-letrero.png" 
+                                alt="Guía para Familias" 
+                                width={500}
+                                height={200}
+                                priority
+                                className="w-[500px] max-w-full h-auto transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer" 
+                            />
                         </Link>
                     </div>
                     <div className="flex flex-col items-center text-slate-800 leading-relaxed -mt-4">
@@ -22,7 +30,13 @@ export default function GuiaFamilias() {
                             <p className="mb-6 text-xl">Nuestro objetivo es ofrecerte herramientas para que te sientas acompañado en este proceso y puedas tomar decisiones con mayor seguridad.</p>
                         </section>
                         <section className="mt-6">
-                            <img src="/como-empezamos.png" alt="Guía para Familias" className="w-[500px] max-w-full h-auto transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer" />
+                            <Image 
+                                src="/como-empezamos.png" 
+                                alt="Guía para Familias" 
+                                width={500}
+                                height={400}
+                                className="w-[500px] max-w-full h-auto transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer" 
+                            />
                         </section>
                     </div>
                 </div>

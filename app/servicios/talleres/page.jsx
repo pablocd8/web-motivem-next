@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Header from "@/components/Header";
 import { infoTalleres } from "@/data/talleresData";
 import Footer from "@/components/Footer";
@@ -13,9 +14,12 @@ export default function Talleres() {
                     {/* Letrero Principal */}
                     <div className="flex justify-center pt-0">
                         <Link href="/servicios">
-                            <img
+                            <Image
                                 src="/talleres-letrero.png"
                                 alt="Talleres"
+                                width={500}
+                                height={250}
+                                priority
                                 className="w-[500px] h-auto transition-transform hover:scale-105 cursor-pointer"
                             />
                         </Link>

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Phone } from "lucide-react";
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
+import Image from 'next/image';
 
 const Header = ({ showLogo = true }) => {
   const router = useRouter();
@@ -102,7 +103,13 @@ const Header = ({ showLogo = true }) => {
             </button>
 
             <div className="mt-12 flex flex-col gap-3">
-              <img src="/logo-motivem-color.png" alt="Logo Motivem" className="block mb-4 max-w-[150px] mx-auto" />
+              <Image 
+                src="/logo-motivem-color.png" 
+                alt="Logo Motivem" 
+                width={150} 
+                height={150} 
+                className="block mb-4 mx-auto object-contain" 
+              />
               {menuItems.map(({ label, color, route }) => (
                 <button
                   key={label}

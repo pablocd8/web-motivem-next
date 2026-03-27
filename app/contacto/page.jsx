@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Formulario from "@/components/Formulario";
@@ -12,7 +13,14 @@ export default function Contacto() {
                 <div className="max-w-6xl mx-auto px-6 md:px-10 pb-16">
                     <div className="flex justify-center pt-6 mb-16">
                         <Link href="/">
-                            <img src="/contacto-letrero.png" alt="Contacto" className="w-[500px] h-auto transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer" />
+                            <Image 
+                                src="/contacto-letrero.png" 
+                                alt="Contacto" 
+                                width={500}
+                                height={200}
+                                priority
+                                className="w-[500px] h-auto transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer" 
+                            />
                         </Link>
                     </div>
                     <div className="flex justify-center mb-20 -mt-36">

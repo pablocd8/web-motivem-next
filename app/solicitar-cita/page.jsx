@@ -144,7 +144,6 @@ export default function SolicitarCita() {
                                             min={new Date().toISOString().split('T')[0]}
                                             value={fecha}
                                             onChange={(e) => setFecha(e.target.value)}
-                                            // Eliminamos el max-w restrictivo de 340px y usamos w-full dentro de max-w-sm
                                             className="w-full md:w-64 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#cfa248] outline-none shadow-sm text-[#5a6a5d] appearance-none"
                                         />
                                     </div>

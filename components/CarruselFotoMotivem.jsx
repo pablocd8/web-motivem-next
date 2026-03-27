@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from "react";
+import Image from "next/image";
 
 const images = [
     "/foto-motivem-sofa.jpg",
@@ -35,12 +36,16 @@ const CarruselFotosMotivem = () => {
                             style={{ transform: `translateX(-${current * 100}%)` }}
                         >
                             {images.map((img, index) => (
-                                <img
-                                    key={index}
-                                    src={img}
-                                    alt={`Motivem ${index + 1}`}
-                                    className="w-full flex-shrink-0 object-cover h-[300px] md:h-[450px]"
-                                />
+                                <div key={index} className="relative w-full flex-shrink-0 h-[300px] md:h-[450px]">
+                                    <Image
+                                        src={img}
+                                        alt={`Motivem ${index + 1}`}
+                                        fill
+                                        className="object-cover"
+                                        sizes="(max-width: 768px) 100vw, 1152px"
+                                        priority={index === 0}
+                                    />
+                                </div>
                             ))}
                         </div>
 

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -10,14 +11,27 @@ export default function QuienesSomos() {
                 <div className="max-w-6xl mx-auto px-6 md:px-10 pt-0 pb-8">
                     <div className="flex justify-center pt-0">
                         <Link href="/">
-                            <img src="/quienes-somos-letrero.png" alt="quienes-somos" className="w-[500px] h-auto transition-transform hover:scale-105 cursor-pointer" />
+                            <Image 
+                                src="/quienes-somos-letrero.png" 
+                                alt="quienes-somos" 
+                                width={500}
+                                height={250}
+                                priority
+                                className="w-[500px] h-auto transition-transform hover:scale-105 cursor-pointer" 
+                            />
                         </Link>
                     </div>
                     <div className="flex justify-center text-slate-800 leading-relaxed">
                         <section className="max-w-3xl text-center">
                             <p className="mb-3 text-2xl">Soy Mar, psicóloga especializada en Educación Especial.</p>
                             <div className="flex justify-center pt-0">
-                                <img src="/foto-motivem-mar.jpg" alt="quienes-somos" className="w-[500px] h-auto transition-transform hover:scale-95 cursor-pointer rounded-lg mb-6" />
+                                <Image 
+                                    src="/foto-motivem-mar.jpg" 
+                                    alt="quienes-somos" 
+                                    width={500}
+                                    height={600}
+                                    className="w-[500px] h-auto transition-transform hover:scale-95 cursor-pointer rounded-lg mb-6" 
+                                />
                             </div>
                             <p className="mb-3 text-lg">Desde pequeña he ido buscando mis pasiones, para que de mayor pudiera disfrutar con mi trabajo. Poco a poco descubrí que entre lo que me hacían feliz estaban las cosas que intentaba hacer día a día: hacer reír y ayudar a los demás.</p>
                             <p className="mb-3 text-2xl">Tomar una decisión.</p>
