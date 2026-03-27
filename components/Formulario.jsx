@@ -43,7 +43,7 @@ const Formulario = () => {
                             name="nombre"
                             type="text"
                             required
-                            className="bg-transparent border-b border-gray-500 py-2 focus:outline-none focus:border-[#76937c] transition-colors"
+                            className="bg-transparent border-b border-gray-500 py-2 focus:outline-none focus:border-[#76937c] transition-colors text-[#3a473d]"
                         />
                     </div>
 
@@ -56,7 +56,7 @@ const Formulario = () => {
                             name="apellidos"
                             type="text"
                             required
-                            className="bg-transparent border-b border-gray-500 py-2 focus:outline-none focus:border-[#76937c] transition-colors"
+                            className="bg-transparent border-b border-gray-500 py-2 focus:outline-none focus:border-[#76937c] transition-colors text-[#3a473d]"
                         />
                     </div>
 
@@ -69,7 +69,7 @@ const Formulario = () => {
                             name="telefono"
                             type="tel"
                             required
-                            className="bg-transparent border-b border-gray-500 py-2 focus:outline-none focus:border-[#76937c] transition-colors"
+                            className="bg-transparent border-b border-gray-500 py-2 focus:outline-none focus:border-[#76937c] transition-colors text-[#3a473d]"
                         />
                     </div>
 
@@ -82,7 +82,7 @@ const Formulario = () => {
                             name="email"
                             type="email"
                             required
-                            className="bg-transparent border-b border-gray-500 py-2 focus:outline-none focus:border-[#76937c] transition-colors"
+                            className="bg-transparent border-b border-gray-500 py-2 focus:outline-none focus:border-[#76937c] transition-colors text-[#3a473d]"
                         />
                     </div>
 
@@ -94,7 +94,7 @@ const Formulario = () => {
                         <textarea
                             name="mensaje"
                             required
-                            className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#76937c]"
+                            className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#76937c] text-[#3a473d]"
                         />
                     </div>
 
