@@ -15,6 +15,7 @@ export default function SolicitarCita() {
     const [estaPendiente, setEstaPendiente] = useState(false);
     const [cargandoHuecos, setCargandoHuecos] = useState(false);
     const [estadoReserva, setEstadoReserva] = useState(null); 
+    const [mensajeErrorFecha, setMensajeErrorFecha] = useState("");
     const { isAuthenticated,loading} = useAuth();
     const router = useRouter();
 
@@ -29,6 +30,17 @@ export default function SolicitarCita() {
     }, [fecha]);
 
     async function buscarDisponibilidad(fechaSel) {
+        const d = new Date(fechaSel);
+        const day = d.getUTCDay(); // 0: Sunday, 6: Saturday
+        
+        if (day === 0 || day === 6) {
+            setMensajeErrorFecha("Los fines de semana no hay citas disponibles. Por favor, selecciona un día de lunes a viernes.");
+            setHuecos([]);
+            setHuecoSeleccionado(null);
+            return;
+        }
+
+        setMensajeErrorFecha("");
         setCargandoHuecos(true);
         setHuecos([]);
         setHuecoSeleccionado(null);
@@ -144,8 +156,13 @@ export default function SolicitarCita() {
                                             min={new Date().toISOString().split('T')[0]}
                                             value={fecha}
                                             onChange={(e) => setFecha(e.target.value)}
-                                            className="w-full md:w-64 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#cfa248] outline-none shadow-sm text-[#5a6a5d] appearance-none"
+                                            className={`w-full md:w-64 p-3 border rounded-lg focus:ring-2 focus:ring-[#cfa248] outline-none shadow-sm text-[#5a6a5d] appearance-none ${
+                                                mensajeErrorFecha ? 'border-red-400 focus:ring-red-200' : 'border-gray-300'
+                                            }`}
                                         />
+                                        {mensajeErrorFecha && (
+                                            <p className="mt-2 text-sm text-red-600 font-medium">{mensajeErrorFecha}</p>
+                                        )}
                                     </div>
                                 </div>
 

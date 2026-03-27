@@ -2,7 +2,7 @@
 
 import connectDB from '@/lib/mongodb';
 import Cita from '@/lib/models/cita';
-import { sendEmail } from './sendEmail';
+import { sendAppointmentAdminNotification, sendAppointmentConfirmation } from './sendEmail';
 
 const HORARIO_LABORAL = {
   inicio: 10,
@@ -18,6 +18,12 @@ export async function obtenerHuecosLibres(fechaString) {
     await connectDB();
     
     const fechaSeleccionada = new Date(fechaString);
+    const diaSemana = fechaSeleccionada.getDay(); // 0: Domingo, 6: Sábado
+
+    if (diaSemana === 0 || diaSemana === 6) {
+      return { success: true, huecos: [], mensaje: 'Los fines de semana no hay citas disponibles. Por favor, selecciona un día de lunes a viernes.' };
+    }
+
     const inicioDia = new Date(fechaSeleccionada.setHours(0, 0, 0, 0));
     const finDia = new Date(fechaSeleccionada.setHours(23, 59, 59, 999));
 
@@ -64,6 +70,11 @@ export async function crearCita(formData) {
     const notas = formData.get('notas');
 
     const fechaCita = new Date(fechaHora);
+    const diaSemana = fechaCita.getDay();
+
+    if (diaSemana === 0 || diaSemana === 6) {
+      return { success: false, error: 'No se permiten reservas en fines de semana.' };
+    }
 
     const existente = await Cita.findOne({
       fechaHora: fechaCita,
@@ -83,16 +94,9 @@ export async function crearCita(formData) {
       notas
     });
 
-    // Enviar confirmación (reutilizando sendEmail)
-    const emailData = new FormData();
-    emailData.set('nombre', nombre);
-    emailData.set('apellidos', '(Reserva)');
-    emailData.set('email', email);
-    emailData.set('telefono', telefono);
-    const mensaje = `Cita confirmada para ${servicio} el día ${fechaCita.toLocaleDateString('es-ES', { timeZone: 'Europe/Madrid' })} a las ${fechaCita.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid' })}.`;
-    emailData.set('mensaje', mensaje);
-    
-    await sendEmail(emailData);
+    // Enviar notificaciones
+    await sendAppointmentAdminNotification(nuevaCita);
+    await sendAppointmentConfirmation(nuevaCita);
 
     return { success: true, citaId: nuevaCita._id.toString() };
   } catch (error) {
