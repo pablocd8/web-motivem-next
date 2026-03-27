@@ -27,17 +27,20 @@ export async function GET(request) {
       recordatorioEnviado: false
     };
 
-    // Filtro para citas en exactamente 48 horas (ventana de 1 hora)
+    // Filtro para citas en la ventana de las próximas 48-72 horas
     if (!esPrueba) {
-      const objetivo = new Date();
-      objetivo.setHours(objetivo.getHours() + 48);
+      const hoyACero = new Date();
+      hoyACero.setHours(0, 0, 0, 0);
+
+      // Buscamos todas las citas que ocurren entre 48h y 72h desde hoy a las 00:00
+      // Esto capturará todas las citas del día "pasado mañana"
+      const inicioRango = new Date(hoyACero);
+      inicioRango.setHours(inicioRango.getHours() + 48); // +48h
       
-      const inicioRango = new Date(objetivo);
-      inicioRango.setHours(inicioRango.getHours() - 1);
-      const finRango = new Date(objetivo);
-      finRango.setHours(finRango.getHours() + 1);
+      const finRango = new Date(hoyACero);
+      finRango.setHours(finRango.getHours() + 72); // +72h (fin del día)
       
-      query.fechaHora = { $gte: inicioRango, $lte: finRango };
+      query.fechaHora = { $gte: inicioRango, $lt: finRango };
     }
 
     const citasParaRecordar = await Cita.find(query);
