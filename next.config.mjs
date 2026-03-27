@@ -5,6 +5,9 @@ const nextConfig = {
   experimental: {
     turbopack: {},
   },
+  images: {
+    formats: ['image/avif', 'image/webp'],
+  },
 
   // Configuración de Webpack
   webpack: (config, { dev, isServer }) => {

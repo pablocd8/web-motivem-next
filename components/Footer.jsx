@@ -55,12 +55,12 @@ const Footer = () => {
 
                         {/* Izquierda: Copyright */}
                         <p className="w-full lg:w-1/3 text-center lg:text-left">
-                            © 2025, MOTIVEM psicología.
+                            © 2026, MOTIVEM psicología.
                         </p>
 
                         {/* Centro: Redes Sociales */}
                         <div className="w-full lg:w-1/3 flex justify-center gap-4">
-                            <a href="https://www.instagram.com/motivem.psicologia?igsh=MWxkc2RybzV2MnpiZQ==" className="bg-[#d4ac50] p-2 rounded-full hover:scale-110 transition-transform">
+                            <a href="https://www.instagram.com/motivem.psicologia" className="bg-[#d4ac50] p-2 rounded-full hover:scale-110 transition-transform">
                                 <FaInstagram size={20} />
                             </a>
                             <a href="https://www.facebook.com/motivem.psicologia" className="bg-[#d4ac50] p-2 rounded-full hover:scale-110 transition-transform">

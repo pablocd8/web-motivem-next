@@ -4,6 +4,9 @@ import React, { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { obtenerHuecosLibres, crearCita } from "@/app/actions/accionesCita";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+
 
 export default function SolicitarCita() {
     const [fecha, setFecha] = useState("");
@@ -11,7 +14,12 @@ export default function SolicitarCita() {
     const [huecoSeleccionado, setHuecoSeleccionado] = useState(null);
     const [estaPendiente, setEstaPendiente] = useState(false);
     const [cargandoHuecos, setCargandoHuecos] = useState(false);
-    const [estadoReserva, setEstadoReserva] = useState(null); // 'exito' | 'error'
+    const [estadoReserva, setEstadoReserva] = useState(null); 
+    const { isAuthenticated,loading} = useAuth();
+    const router = useRouter();
+
+
+
 
     // Cargar huecos cuando cambia la fecha
     useEffect(() => {
@@ -58,17 +66,57 @@ export default function SolicitarCita() {
         }
     }
 
+    if (!isAuthenticated) {
+        return (
+            <>
+                <Header showLogo={true} />
+                <main className="min-h-screen bg-[#efdfc2] py-12 px-6 flex items-center justify-center">
+                    <div className="bg-white rounded-3xl p-10 max-w-md w-full shadow-2xl text-center border border-[#d4c3a3]">
+                        <div className="text-6xl mb-5">🔒</div>
+                        <h2 className="text-3xl font-bold text-[#6e9277] mb-4">Acceso Restringido</h2>
+                        <p className="text-base text-gray-600 mb-8 leading-relaxed">
+                            Para solicitar una cita necesitas tener una cuenta en Motivem.
+                            Así podrás gestionar tus reservas fácilmente.
+                        </p>
+
+                        <div className="flex flex-col gap-3 mb-5">
+                            <button
+                                onClick={() => router.push('/login?redirect=/solicitar-cita')}
+                                className="px-6 py-4 text-base font-semibold text-white bg-[#cfa248] rounded-xl hover:bg-[#bf7b56] hover:shadow-lg transition-all duration-300 cursor-pointer"
+                            >
+                                Iniciar Sesión
+                            </button>
+                            <button
+                                onClick={() => router.push('/register')}
+                                className="px-6 py-4 text-base font-semibold text-[#6e9277] bg-white border-2 border-[#6e9277] rounded-xl hover:bg-[#6e9277] hover:text-white transition-all duration-300 cursor-pointer"
+                            >
+                                Crear Cuenta
+                            </button>
+                        </div>
+
+                        <p className="text-sm text-gray-400">
+                            Es gratis y solo toma un minuto
+                        </p>
+                    </div>
+                </main>
+                <Footer />
+            </>
+        );
+    }
+
+
+
     return (
         <>
             <Header showLogo={true} />
-            <main className="min-h-screen bg-[#efdfc2] py-12 px-6">
-                <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-[#d4c3a3]">
-                    <div className="bg-[#cfa248] p-8 text-center text-white">
+            <main className="min-h-screen bg-[#efdfc2] py-8 md:py-12 px-2 md:px-6">
+                <div className="max-w-4xl mx-auto bg-white rounded-xl md:rounded-2xl shadow-xl overflow-hidden border border-[#d4c3a3]">
+                    <div className="bg-[#cfa248] p-6 md:p-8 text-center md:text-left text-white">
                         <h1 className="text-3xl font-bold mb-2 uppercase tracking-wide">Solicitar Cita</h1>
                         <p className="opacity-90">Reserva tu sesión de psicoterapia de forma sencilla</p>
                     </div>
 
-                    <div className="p-8 md:p-12">
+                    <div className="p-5 md:p-12">
                         {estadoReserva === 'exito' ? (
                             <div className="text-center py-10">
                                 <div className="text-6xl mb-4">✅</div>
@@ -89,14 +137,16 @@ export default function SolicitarCita() {
                                         <span className="w-8 h-8 bg-[#cfa248] text-white rounded-full flex items-center justify-center text-sm">1</span>
                                         Elige un día
                                     </h3>
-                                    <input 
-                                        type="date" 
-                                        required
-                                        min={new Date().toISOString().split('T')[0]}
-                                        value={fecha}
-                                        onChange={(e) => setFecha(e.target.value)}
-                                        className="w-full md:w-64 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#cfa248] outline-none shadow-sm text-[#5a6a5d]"
-                                    />
+                                    <div className="max-w-sm">
+                                        <input 
+                                            type="date" 
+                                            required
+                                            min={new Date().toISOString().split('T')[0]}
+                                            value={fecha}
+                                            onChange={(e) => setFecha(e.target.value)}
+                                            className="w-full md:w-64 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#cfa248] outline-none shadow-sm text-[#5a6a5d] appearance-none"
+                                        />
+                                    </div>
                                 </div>
 
                                 {/* Paso 2: Selección de Hora */}

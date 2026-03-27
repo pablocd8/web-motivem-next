@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 export default function Mindfullness() {
@@ -7,12 +8,15 @@ export default function Mindfullness() {
         <Header showLogo={false} />
         <div className="min-h-screen w-full -mt-6" style={{ backgroundColor: "#efdfc2" }}>
         <div className="max-w-6xl mx-auto px-6 md:px-10 pt-2 pb-8">
-            {/* Letrero */}
+            {/* Let rero */}
             <div className="flex flex-col items-center ">
             <Link href="/servicios/talleres">
-                <img
+                <Image
                 src="/mindfullness-letrero.png"
                 alt="Mindfullness"
+                width={450}
+                height={200}
+                priority
                 className="w-[450px] h-auto transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer"
                 />
             </Link>

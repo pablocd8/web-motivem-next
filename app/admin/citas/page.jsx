@@ -2,14 +2,35 @@
 
 import React, { useEffect, useState } from 'react';
 import Header from '@/components/Header';
+import { useAuth } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function AdminCitas() {
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [citas, setCitas] = useState([]);
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
-    cargarCitas();
-  }, []);
+    if (!authLoading) {
+      if (!isAuthenticated || user?.rol !== 'admin') {
+        router.push('/');
+      } else {
+        cargarCitas();
+      }
+    }
+  }, [authLoading, isAuthenticated, user, router]);
+
+  if (authLoading || (!isAuthenticated || user?.rol !== 'admin')) {
+    return (
+      <div className="min-h-screen bg-[#efdfc2] flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#cfa248] mx-auto mb-4"></div>
+          <p className="text-[#3a473d] font-bold">Verificando permisos...</p>
+        </div>
+      </div>
+    );
+  }
 
   async function cargarCitas() {
     const res = await fetch('/api/admin/citas');

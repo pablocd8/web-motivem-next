@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 export default function Emociones() {
@@ -10,9 +11,12 @@ export default function Emociones() {
                     {/* Letrero */}
                     <div className="flex flex-col items-center mt-2">
                         <Link href="/servicios/talleres">
-                            <img
+                            <Image
                                 src="/emociones-letrero.png"
                                 alt="Emociones"
+                                width={450}
+                                height={200}
+                                priority
                                 className="w-[450px] h-auto transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer"
                             />
                         </Link>

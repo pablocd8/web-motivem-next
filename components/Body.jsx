@@ -1,13 +1,18 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const Body = () => {
     return (
         <>
             <div className="text-center mt-40 max-w-[420px] md:max-w-[600px] mx-auto">
-                <img
+                <Image
                     src="/imagen-motivem.png"
                     alt="Logo Motivem"
+                    width={600}
+                    height={400}
+                    priority
                     className="mx-auto w-full h-auto block transition-transform duration-300 ease-in-out hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, 600px"
                 />
             </div>
 
@@ -20,7 +25,14 @@ const Body = () => {
 
                     {/* Bloque 1 */}
                     <div className="flex flex-col items-center" data-aos="fade-up" data-aos-delay="100">
-                        <img src="/diseña-tu-taller.png" alt="diseña tu taller" className="w-full max-w-md rounded" />
+                        <Image 
+                            src="/diseña-tu-taller.png" 
+                            alt="diseña tu taller" 
+                            width={500}
+                            height={300}
+                            className="w-full max-w-md rounded" 
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                        />
                         <Link href="/crear-taller" className="mt-4 px-6 py-2 border border-[#bf7b56] text-[#bf7b56] hover:bg-[#bf7b56] hover:text-white transition-colors duration-300 rounded">
                             SABER MÁS
                         </Link>
@@ -28,7 +40,14 @@ const Body = () => {
 
                     {/* Bloque 2 */}
                     <div className="flex flex-col items-center" data-aos="fade-up">
-                        <img src="/guia-para-familias.png" alt="guia para familias" className="w-full max-w-md rounded" />
+                        <Image 
+                            src="/guia-para-familias.png" 
+                            alt="guia para familias" 
+                            width={500}
+                            height={300}
+                            className="w-full max-w-md rounded" 
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                        />
                         <Link href="/guia-familias" className="mt-4 px-6 py-2 border border-[#e6ca92] text-[#8b5e3b] hover:bg-[#e7d0a3] hover:text-white transition-colors duration-300 rounded">
                             SABER MÁS
                         </Link>
@@ -36,7 +55,14 @@ const Body = () => {
 
                     {/* Bloque 3 */}
                     <div className="flex flex-col items-center" data-aos="fade-up" data-aos-delay="200">
-                        <img src="/historias-que-inspiran.png" alt="historias que inspiran" className="w-full max-w-md rounded" />
+                        <Image 
+                            src="/historias-que-inspiran.png" 
+                            alt="historias que inspiran" 
+                            width={500}
+                            height={300}
+                            className="w-full max-w-md rounded" 
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                        />
                         <Link href="/otra-pagina" className="mt-4 px-6 py-2 border border-[#94a3b8] text-[#94a3b8] hover:bg-[#94a3b8] hover:text-white transition-colors duration-300 rounded">
                             SABER MÁS
                         </Link>
