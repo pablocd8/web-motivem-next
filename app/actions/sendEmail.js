@@ -3,7 +3,7 @@
 import { Resend } from 'resend';
 
 export async function sendEmail(formData) {
-  const resend = new Resend(process.env.RESEND_API_KEY || 'temp_key_for_build');
+  const resend = new Resend(process.env.RESEND_API_KEY);
   console.log('--- Intentando enviar email ---');
   console.log('RESEND_API_KEY exists:', !!process.env.RESEND_API_KEY);
   const nombre = formData.get('nombre');
@@ -15,7 +15,7 @@ export async function sendEmail(formData) {
 
   try {
     const { data, error } = await resend.emails.send({
-      from: 'Motivem Web <onboarding@resend.dev>', // Cambiar por dominio verificado en producción
+      from: 'Motivem Web <contacto@motivem.es>', 
       to: ['pablocerdadonat8@gmail.com'],
       subject: `Nuevo mensaje de contacto: ${nombreCompleto}`,
       replyTo: email,
