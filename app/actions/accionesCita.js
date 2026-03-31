@@ -59,7 +59,7 @@ export async function obtenerHuecosLibres(fechaString) {
           });
 
           if (!ocupado) {
-            huecos.push(slotDate.toISOString());
+            huecos.push(horaStr);
           }
         }
       }
