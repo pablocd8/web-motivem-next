@@ -70,6 +70,11 @@ const nextConfig = {
         destination: '/servicios/talleres',
         permanent: true,
       },
+      {
+        source: '/psicologo-en-ontinyent',
+        destination: '/contacto',
+        permanent: true,
+      }
     ];
   },
 };
