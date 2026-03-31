@@ -30,16 +30,6 @@ export default function SolicitarCita() {
     }, [fecha]);
 
     async function buscarDisponibilidad(fechaSel) {
-        const d = new Date(fechaSel);
-        const day = d.getUTCDay(); // 0: Sunday, 6: Saturday
-        
-        if (day === 0 || day === 6) {
-            setMensajeErrorFecha("Los fines de semana no hay citas disponibles. Por favor, selecciona un día de lunes a viernes.");
-            setHuecos([]);
-            setHuecoSeleccionado(null);
-            return;
-        }
-
         setMensajeErrorFecha("");
         setCargandoHuecos(true);
         setHuecos([]);
@@ -47,9 +37,16 @@ export default function SolicitarCita() {
         
         const resultado = await obtenerHuecosLibres(fechaSel);
         if (resultado.success) {
-            setHuecos(resultado.huecos);
+            if (resultado.mensaje) {
+                setMensajeErrorFecha(resultado.mensaje);
+                setHuecos([]);
+            } else {
+                setHuecos(resultado.huecos);
+                setMensajeErrorFecha("");
+            }
         } else {
             console.error(resultado.error);
+            setMensajeErrorFecha("Error al cargar disponibilidad. Inténtalo de nuevo.");
         }
         setCargandoHuecos(false);
     }
@@ -229,8 +226,8 @@ export default function SolicitarCita() {
                                                 <label className="text-sm font-semibold text-[#3a473d]">Servicio*</label>
                                                 <select name="servicio" required className="p-3 border-b border-gray-200 bg-transparent text-[#5a6a5d] focus:border-[#cfa248] outline-none cursor-pointer">
                                                     <option value="Psicoterapia individual">Psicoterapia individual</option>
-                                                    <option value="Psicoterapia de pareja">Psicoterapia de pareja</option>
-                                                    <option value="Psicopedagogía">Psicopedagogía</option>
+                                                    <option value="Psicoterapia familiar">Psicoterapia familiar</option>
+                                                    <option value="Dificultades de aprendizaje/Motivación al estudio">Dificultades de aprendizaje/Motivación al estudio</option>
                                                 </select>
                                             </div>
                                             <div className="md:col-span-2 flex flex-col gap-2">
