@@ -25,8 +25,8 @@ const Formulario = () => {
     }
 
     return (
-        <div className="w-full bg-[#efdfc2] px-4 mt-4.5">
-            <div className="max-w-4xl mx-auto py-10">
+        <div className="w-full px-4 mt-12 mb-20">
+            <div className="max-w-4xl mx-auto bg-[#efdfc2] rounded-3xl shadow-2xl p-8 md:p-12 border border-[#d4c3a3]/30">
 
                 <h2 className="text-[#cfa248] text-2xl font-bold mb-8 text-center md:text-left">
                     Escríbenos y te llamaremos para saber cómo podemos ayudar
@@ -35,80 +35,85 @@ const Formulario = () => {
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 text-left">
 
                     {/* Nombre */}
-                    <div className="flex flex-col">
-                        <label className="text-sm font-semibold text-[#3a473d]">
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-semibold text-[#6e9277]">
                             Nombre*
                         </label>
                         <input
                             name="nombre"
                             type="text"
                             required
-                            className="bg-transparent border-b border-gray-500 py-2 focus:outline-none focus:border-[#76937c] transition-colors text-[#3a473d]"
+                            placeholder="Tu nombre"
+                            className="p-4 text-base text-black/40 border-2 border-[#cfa248]/50 placeholder-black/40 rounded-xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/20"
                         />
                     </div>
 
                     {/* Apellidos */}
-                    <div className="flex flex-col">
-                        <label className="text-sm font-semibold text-[#3a473d]">
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-semibold text-[#6e9277]">
                             Apellidos*
                         </label>
                         <input
                             name="apellidos"
                             type="text"
                             required
-                            className="bg-transparent border-b border-gray-500 py-2 focus:outline-none focus:border-[#76937c] transition-colors text-[#3a473d]"
+                            placeholder="Tus apellidos"
+                            className="p-4 text-base text-black/40 border-2 border-[#cfa248]/50 placeholder-black/40 rounded-xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/20"
                         />
                     </div>
 
                     {/* Teléfono */}
-                    <div className="flex flex-col">
-                        <label className="text-sm font-semibold text-[#3a473d]">
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-semibold text-[#6e9277]">
                             Teléfono*
                         </label>
                         <input
                             name="telefono"
                             type="tel"
                             required
-                            className="bg-transparent border-b border-gray-500 py-2 focus:outline-none focus:border-[#76937c] transition-colors text-[#3a473d]"
+                            placeholder="Ej: 600 000 000"
+                            className="p-4 text-base text-black/40 border-2 border-[#cfa248]/50 placeholder-black/40 rounded-xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/20"
                         />
                     </div>
 
                     {/* Email */}
-                    <div className="flex flex-col">
-                        <label className="text-sm font-semibold text-[#3a473d]">
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-semibold text-[#6e9277]">
                             Email*
                         </label>
                         <input
                             name="email"
                             type="email"
                             required
-                            className="bg-transparent border-b border-gray-500 py-2 focus:outline-none focus:border-[#76937c] transition-colors text-[#3a473d]"
+                            placeholder="tu@email.com"
+                            className="p-4 text-base text-black/40 border-2 border-[#cfa248]/50 placeholder-black/40 rounded-xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/20"
                         />
                     </div>
 
                     {/* Mensaje */}
-                    <div className="flex flex-col md:col-span-2 mt-4">
-                        <label className="text-sm font-semibold text-[#3a473d] mb-2">
+                    <div className="flex flex-col md:col-span-2 mt-2 gap-2">
+                        <label className="text-sm font-semibold text-[#6e9277]">
                             Cuéntanos más aquí...
                         </label>
                         <textarea
                             name="mensaje"
                             required
-                            className="w-full h-32 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#76937c] text-[#3a473d]"
+                            placeholder="Describe brevemente cómo podemos ayudarte"
+                            className="w-full h-36 p-4 text-base text-black/40 border-2 border-[#cfa248]/50 placeholder-black/40 rounded-xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/20 resize-none"
                         />
                     </div>
 
                     {/* Política */}
-                    <div className="md:col-span-2 flex items-center gap-2">
+                    <div className="md:col-span-2 flex items-center gap-3 mt-2">
                         <input
                             type="checkbox"
                             id="privacy"
                             required
-                            className="accent-[#76937c]"
+                            className="w-5 h-5 accent-[#cfa248] cursor-pointer"
                         />
                         <label
                             htmlFor="privacy"
-                            className="text-xs text-gray-700 cursor-pointer"
+                            className="text-sm text-[#5a6a5d] cursor-pointer hover:text-[#cfa248] transition-colors"
                         >
                             Acepto las políticas de privacidad
                         </label>
@@ -119,22 +124,24 @@ const Formulario = () => {
                         <button
                             type="submit"
                             disabled={isPending}
-                            className={`border border-[#76937c] text-[#76937c] px-8 py-2 rounded-md transition-all uppercase text-sm tracking-widest ${
-                                isPending ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#76937c] hover:text-white cursor-pointer'
+                            className={`p-4 text-base font-semibold text-white bg-[#cfa248] hover:bg-[#bf7b56] rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-[1.02] ${
+                                isPending ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
                             }`}
                         >
-                            {isPending ? 'Enviando...' : 'Enviar'}
+                            {isPending ? 'Enviando...' : 'Enviar mensaje'}
                         </button>
 
                         {status === 'success' && (
-                            <p className="text-sm text-green-700 font-medium">
+                            <div className="bg-green-50 border border-green-200 rounded-xl p-4 text-green-700 text-sm flex items-center gap-3">
+                                <span className="text-lg">✅</span>
                                 ¡Mensaje enviado con éxito! Te contactaremos pronto.
-                            </p>
+                            </div>
                         )}
                         {status === 'error' && (
-                            <p className="text-sm text-red-600 font-medium">
-                                Hubo un error al enviar el mensaje. Por favor, inténtalo de nuevo o contáctanos por teléfono.
-                            </p>
+                            <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-600 text-sm flex items-center gap-3">
+                                <span className="text-lg">⚠️</span>
+                                Hubo un error al enviar el mensaje. Por favor, inténtalo de nuevo.
+                            </div>
                         )}
                     </div>
 

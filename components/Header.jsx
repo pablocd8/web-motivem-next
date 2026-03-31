@@ -35,7 +35,6 @@ const Header = ({ showLogo = true }) => {
         </svg>
       </button>
 
-      {/* Teléfono y CTA */}
       <div className="absolute top-6 right-3 md:right-6 z-20 flex items-center gap-2 md:gap-4 font-medium text-[#8b5e3b]">
         <span className="hidden md:flex items-center gap-1 text-base">
           <Phone className="w-5 h-5 text-black" />
@@ -46,6 +45,14 @@ const Header = ({ showLogo = true }) => {
             Solicitar cita
           </button>
         </Link>
+
+        {isAuthenticated && (
+          <Link href="/perfil" className="hidden md:block">
+            <button className="border-2 border-[#cfa248] text-[#cfa248] bg-transparent hover:bg-[#cfa248] hover:text-white text-[13px] md:text-base px-3 py-1.5 md:px-5 md:py-1.5 rounded shadow transition cursor-pointer whitespace-nowrap">
+              Mi Perfil
+            </button>
+          </Link>
+        )}
 
         {isAuthenticated && user?.rol === 'admin' && (
           <Link href="/admin/citas" className="hidden md:block">
@@ -127,6 +134,14 @@ const Header = ({ showLogo = true }) => {
               ))}
 
               <div className="w-full h-px bg-[#d4c3a3] my-4"></div>
+
+              {isAuthenticated && (
+                <Link href="/perfil" onClick={() => setMenuOpen(false)} className="w-full">
+                  <button className="w-full border-2 border-[#cfa248] text-[#cfa248] py-4 rounded-xl font-black shadow-lg hover:bg-[#cfa248] hover:text-white transition-all uppercase text-xs tracking-[0.2em]">
+                    👤 MI PERFIL
+                  </button>
+                </Link>
+              )}
 
               {isAuthenticated && user?.rol === 'admin' && (
                 <Link href="/admin/citas" onClick={() => setMenuOpen(false)} className="w-full">

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { Eye, EyeOff } from 'lucide-react';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -15,6 +16,8 @@ const Register = () => {
         password: '',
         confirmPassword: ''
     });
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -68,10 +71,10 @@ const Register = () => {
     };
 
     return (
-        <>
+        <div className="min-h-screen flex flex-col bg-gradient-to-br from-[#efdfc2] to-[#d4c9b3]">
             <Header />
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#efdfc2] to-[#d4c9b3] p-5">
-                <div className="bg-[#efdfc2] rounded-3xl shadow-2xl p-12 max-w-lg w-full ">
+            <main className="flex-grow flex items-center justify-center p-5 py-20">
+                <div className="bg-[#efdfc2] rounded-3xl shadow-2xl p-12 max-w-lg w-full my-auto">
                     <div className="text-center mb-10">
                         <h1 className="text-4xl font-bold text-[#6e9277] mb-3">Crear Cuenta</h1>
                         <p className="text-[#94a3b8] text-base">Únete a la comunidad Motivem</p>
@@ -85,71 +88,89 @@ const Register = () => {
                             </div>
                         )}
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="flex flex-col gap-2">
-                                <label className="text-sm font-semibold text-[#6e9277]">Nombre</label>
+                                <label className="text-sm font-semibold text-[#6e9277] ml-1">Nombre</label>
                                 <input
                                     type="text"
                                     name="nombre"
                                     value={formData.nombre}
                                     onChange={handleChange}
                                     placeholder="Tu nombre"
-                                    className="p-4 text-base text-black/40 border-2 border-[#cfa248]/50 placeholder-black/40 rounded-xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/20"
+                                    className="p-4 text-base text-[#5a6a5d] border border-[#cfa248]/50 placeholder-[#5a6a5d]/40 rounded-2xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/10 bg-black/5 md:bg-transparent"
                                     disabled={loading}
                                 />
                             </div>
 
                             <div className="flex flex-col gap-2">
-                                <label className="text-sm font-semibold text-[#6e9277]">Apellido</label>
+                                <label className="text-sm font-semibold text-[#6e9277] ml-1">Apellido</label>
                                 <input
                                     type="text"
                                     name="apellido"
                                     value={formData.apellido}
                                     onChange={handleChange}
                                     placeholder="Tu apellido"
-                                    className="p-4 text-base text-black/40 border-2 border-[#cfa248]/50 placeholder-black/40 rounded-xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/20"
+                                    className="p-4 text-base text-[#5a6a5d] border border-[#cfa248]/50 placeholder-[#5a6a5d]/40 rounded-2xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/10 bg-black/5 md:bg-transparent"
                                     disabled={loading}
                                 />
                             </div>
                         </div>
 
                         <div className="flex flex-col gap-2">
-                            <label className="text-sm font-semibold text-[#6e9277]">Email</label>
+                            <label className="text-sm font-semibold text-[#6e9277] ml-1">Email</label>
                             <input
                                 type="email"
                                 name="email"
                                 value={formData.email}
                                 onChange={handleChange}
                                 placeholder="tu@email.com"
-                                className="p-4 text-base text-black/40 border-2 border-[#cfa248]/50 placeholder-black/40 rounded-xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/20"
+                                className="p-4 text-base text-[#5a6a5d] border border-[#cfa248]/50 placeholder-[#5a6a5d]/40 rounded-2xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/10 bg-black/5 md:bg-transparent"
                                 disabled={loading}
                             />
                         </div>
 
                         <div className="flex flex-col gap-2">
-                            <label className="text-sm font-semibold text-[#6e9277]">Contraseña</label>
-                            <input
-                                type="password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                placeholder="Mínimo 6 caracteres"
-                                className="p-4 text-base text-black/40 border-2 border-[#cfa248]/50 placeholder-black/40 rounded-xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/20"
-                                disabled={loading}
-                            />
+                            <label className="text-sm font-semibold text-[#6e9277] ml-1">Contraseña</label>
+                            <div className="relative">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    placeholder="Mínimo 6 caracteres"
+                                    className="w-full p-4 text-base text-[#5a6a5d] border border-[#cfa248]/50 placeholder-[#5a6a5d]/40 rounded-2xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/10 bg-black/5 md:bg-transparent"
+                                    disabled={loading}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#5a6a5d]/40 hover:text-[#cfa248] transition-colors"
+                                >
+                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
+                            </div>
                         </div>
 
                         <div className="flex flex-col gap-2">
-                            <label className="text-sm font-semibold text-[#6e9277]">Confirmar Contraseña</label>
-                            <input
-                                type="password"
-                                name="confirmPassword"
-                                value={formData.confirmPassword}
-                                onChange={handleChange}
-                                placeholder="Repite tu contraseña"
-                                className="p-4 text-base text-black/40 border-2 border-[#cfa248]/50 placeholder-black/40 rounded-xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/20"
-                                disabled={loading}
-                            />
+                            <label className="text-sm font-semibold text-[#6e9277] ml-1">Confirmar Contraseña</label>
+                            <div className="relative">
+                                <input
+                                    type={showConfirmPassword ? "text" : "password"}
+                                    name="confirmPassword"
+                                    value={formData.confirmPassword}
+                                    onChange={handleChange}
+                                    placeholder="Repite tu contraseña"
+                                    className="w-full p-4 text-base text-[#5a6a5d] border border-[#cfa248]/50 placeholder-[#5a6a5d]/40 rounded-2xl outline-none transition-all duration-300 focus:border-[#cfa248] focus:ring-2 focus:ring-[#cfa248]/10 bg-black/5 md:bg-transparent"
+                                    disabled={loading}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#5a6a5d]/40 hover:text-[#cfa248] transition-colors"
+                                >
+                                    {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                </button>
+                            </div>
                         </div>
 
                         <button
@@ -170,9 +191,9 @@ const Register = () => {
                         </div>
                     </form>
                 </div>
-            </div>
-            <Footer />
-        </>
+            </main>
+            <Footer className="mt-0" />
+        </div>
     );
 };
 
