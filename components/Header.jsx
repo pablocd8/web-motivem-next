@@ -103,13 +103,15 @@ const Header = ({ showLogo = true }) => {
             </button>
 
             <div className="mt-12 flex flex-col gap-3">
-              <Image 
-                src="/logo-motivem-color.png" 
-                alt="Logo Motivem" 
-                width={150} 
-                height={150} 
+              <Link href="/">
+                <Image 
+                  src="/logo-motivem-color.png" 
+                  alt="Logo Motivem" 
+                  width={150} 
+                  height={150} 
                 className="block mb-4 mx-auto object-contain" 
               />
+              </Link>
               {menuItems.map(({ label, color, route }) => (
                 <button
                   key={label}

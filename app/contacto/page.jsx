@@ -13,13 +13,13 @@ export default function Contacto() {
                 <div className="max-w-6xl mx-auto px-6 md:px-10 pb-16">
                     <div className="flex justify-center pt-6 mb-16">
                         <Link href="/">
-                            <Image 
-                                src="/contacto-letrero.png" 
-                                alt="Contacto" 
+                            <Image
+                                src="/contacto-letrero.png"
+                                alt="Contacto"
                                 width={500}
                                 height={200}
                                 priority
-                                className="w-[500px] h-auto transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer" 
+                                className="w-[500px] h-auto transition-transform duration-300 ease-in-out hover:scale-105 cursor-pointer"
                             />
                         </Link>
                     </div>

@@ -11,13 +11,13 @@ export default function QuienesSomos() {
                 <div className="max-w-6xl mx-auto px-6 md:px-10 pt-0 pb-8">
                     <div className="flex justify-center pt-0">
                         <Link href="/">
-                            <Image 
-                                src="/quienes-somos-letrero.png" 
-                                alt="quienes-somos" 
+                            <Image
+                                src="/quienes-somos-letrero.png"
+                                alt="quienes-somos"
                                 width={500}
                                 height={250}
                                 priority
-                                className="w-[500px] h-auto transition-transform hover:scale-105 cursor-pointer" 
+                                className="w-[500px] h-auto transition-transform hover:scale-105 cursor-pointer"
                             />
                         </Link>
                     </div>
@@ -25,12 +25,12 @@ export default function QuienesSomos() {
                         <section className="max-w-3xl text-center">
                             <p className="mb-3 text-2xl">Soy Mar, psicóloga especializada en Educación Especial.</p>
                             <div className="flex justify-center pt-0">
-                                <Image 
-                                    src="/foto-motivem-mar.jpg" 
-                                    alt="quienes-somos" 
+                                <Image
+                                    src="/foto-motivem-mar.jpg"
+                                    alt="quienes-somos"
                                     width={500}
                                     height={600}
-                                    className="w-[500px] h-auto transition-transform hover:scale-95 cursor-pointer rounded-lg mb-6" 
+                                    className="w-[500px] h-auto transition-transform hover:scale-95 cursor-pointer rounded-lg mb-6"
                                 />
                             </div>
                             <p className="mb-3 text-lg">Desde pequeña he ido buscando mis pasiones, para que de mayor pudiera disfrutar con mi trabajo. Poco a poco descubrí que entre lo que me hacían feliz estaban las cosas que intentaba hacer día a día: hacer reír y ayudar a los demás.</p>
