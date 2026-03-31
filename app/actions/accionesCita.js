@@ -5,6 +5,7 @@ import Cita from '@/lib/models/cita';
 import { sendAppointmentAdminNotification, sendAppointmentConfirmation } from './sendEmail';
 import { isHoliday } from '@/lib/constants/holidays';
 import { SCHEDULE_CONFIG } from '@/lib/constants/schedule';
+import { parseMadridDate, formatMadridTime } from '@/lib/utils/date-utils';
 
 /**
  * Obtiene los huecos disponibles para una fecha específica
@@ -28,8 +29,9 @@ export async function obtenerHuecosLibres(fechaString) {
       return { success: true, huecos: [], mensaje: 'Este día es festivo en Ontinyent. No hay citas disponibles.' };
     }
 
-    const inicioDia = new Date(year, month - 1, day, 0, 0, 0, 0);
-    const finDia = new Date(year, month - 1, day, 23, 59, 59, 999);
+    // Definir inicio y fin de día de Madrid en UTC para la consulta
+    const inicioDia = parseMadridDate(`${fechaString}T00:00:00`);
+    const finDia = parseMadridDate(`${fechaString}T23:59:59`);
 
     const citasExistentes = await Cita.find({
       fechaHora: { $gte: inicioDia, $lte: finDia },
@@ -45,17 +47,17 @@ export async function obtenerHuecosLibres(fechaString) {
     const slotsPosibles = [...baseGrid, ...extraSlots];
 
     slotsPosibles.forEach(horaStr => {
-      const [hh, mm] = horaStr.split(':').map(Number);
-      const slotDate = new Date(year, month - 1, day, hh, mm, 0, 0);
+      // Slot específico en Madrid TZ
+      const slotMadrid = parseMadridDate(`${fechaString}T${horaStr}:00`);
       
       // Filtrar si está en el pasado (hoy)
       const ahora = new Date();
-      if (slotDate > ahora) {
+      if (slotMadrid > ahora) {
         // Filtrar si es una exclusión específica para este día
         if (!exclusiones.includes(horaStr)) {
-          // Filtrar si ya está ocupado
+          // Filtrar si ya está ocupado (comparando tiempos UTC exactos)
           const ocupado = citasExistentes.some(c => {
-            return new Date(c.fechaHora).getTime() === slotDate.getTime();
+            return new Date(c.fechaHora).getTime() === slotMadrid.getTime();
           });
 
           if (!ocupado) {
@@ -83,12 +85,13 @@ export async function crearCita(formData) {
     const email = formData.get('email');
     const telefono = formData.get('telefono');
     const servicio = formData.get('servicio');
-    const fechaHora = formData.get('fechaHora');
+    const fechaHora = formData.get('fechaHora'); // Viene como "YYYY-MM-DDTHH:mm:ss"
     const notas = formData.get('notas');
 
-    const fechaCita = new Date(fechaHora);
+    // Parseamos forzando zona horaria de Madrid
+    const fechaCita = parseMadridDate(fechaHora);
     const diaSemana = fechaCita.getDay();
-    const horaStr = fechaCita.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false });
+    const horaStr = formatMadridTime(fechaCita);
 
     // 1. Validar Fin de Semana
     if (diaSemana === 0 || diaSemana === 6) {
@@ -96,7 +99,7 @@ export async function crearCita(formData) {
     }
 
     // 2. Validar Festivos
-    const fechaString = fechaCita.toISOString().split('T')[0];
+    const fechaString = fechaHora.split('T')[0];
     if (isHoliday(fechaString)) {
       return { success: false, error: 'Este día es festivo en Ontinyent.' };
     }
@@ -125,7 +128,7 @@ export async function crearCita(formData) {
       notas
     });
 
-    // Enviar notificaciones
+    // Enviar notificaciones (las funciones en sendEmail ya usarán Intl para Madrid)
     await sendAppointmentAdminNotification(nuevaCita);
     await sendAppointmentConfirmation(nuevaCita);
 

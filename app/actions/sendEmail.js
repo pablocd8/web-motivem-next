@@ -1,6 +1,7 @@
 'use server';
 
 import { Resend } from 'resend';
+import { formatMadridDate, formatMadridTime } from '@/lib/utils/date-utils';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const COMPANY_NAME = 'MOTIVEM';
@@ -38,46 +39,78 @@ async function sendResendEmail({ to, subject, html, replyTo }) {
 }
 
 /**
- * Plantilla base para emails de Motivem (Diseño Premium 2026)
+ * Plantilla base para emails de Motivem (Diseño Premium 2026 - Versión Robusta)
  */
 const getBaseTemplate = (title, content, variant = 'gold') => {
   const primaryColor = variant === 'red' ? '#bf7b56' : '#d4ac50';
   const secondaryColor = variant === 'red' ? '#fdf5f0' : '#fefaf3';
   
   return `
-    <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: ${secondaryColor}; border-radius: 20px; overflow: hidden; border: 1px solid #eaddca; color: #3a473d;">
-      <!-- Cabecera -->
-      <div style="background-color: ${primaryColor}; padding: 40px 20px; text-align: center;">
-        <h1 style="color: white; margin: 0; font-size: 32px; letter-spacing: 4px; font-weight: 300; text-transform: uppercase;">${COMPANY_NAME}</h1>
-        <p style="color: white; margin: 12px 0 0 0; opacity: 0.9; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; font-weight: 400;">${title}</p>
-      </div>
-      
-      <!-- Contenido Principal -->
-      <div style="padding: 40px 30px; line-height: 1.6;">
-        ${content}
-      </div>
-      
-      <!-- Pie de Página -->
-      <div style="background-color: #f1e9db; padding: 30px 20px; text-align: center; font-size: 12px; color: #8a7a5d; border-top: 1px solid #eaddca;">
-        <p style="margin: 0 0 8px 0; font-weight: 600; opacity: 0.8;">© ${new Date().getFullYear()} ${COMPANY_NAME}. Reservados todos los derechos.</p>
-        <span style="display: block; opacity: 0.6;">Este es un mensaje automático, por favor no lo respondas directamente.</span>
-      </div>
-    </div>
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>${title}</title>
+    </head>
+    <body style="margin: 0; padding: 0; background-color: #f4f4f4; -webkit-text-size-adjust: 100%;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+        <tr>
+          <td align="center" style="padding: 20px 0;">
+            <table role="presentation" width="100%" style="max-width: 600px; background-color: ${secondaryColor}; border-radius: 24px; overflow: hidden; border: 1px solid #eaddca; border-collapse: separate;" cellspacing="0" cellpadding="0" border="0">
+              <!-- Cabecera -->
+              <tr>
+                <td align="center" style="background-color: ${primaryColor}; padding: 50px 20px;">
+                  <h1 style="color: #ffffff; margin: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 32px; letter-spacing: 5px; font-weight: 300; text-transform: uppercase; line-height: 1.2;">${COMPANY_NAME}</h1>
+                  <p style="color: #ffffff; margin: 15px 0 0 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; opacity: 0.9; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; font-weight: 400;">${title}</p>
+                </td>
+              </tr>
+              
+              <!-- Contenido Principal -->
+              <tr>
+                <td style="padding: 40px 30px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1.6; color: #3a473d;">
+                  ${content}
+                </td>
+              </tr>
+              
+              <!-- Pie de Página -->
+              <tr>
+                <td align="center" style="background-color: #f1e9db; padding: 30px 20px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 12px; color: #8a7a5d; border-top: 1px solid #eaddca;">
+                  <p style="margin: 0 0 10px 0; font-weight: 600; opacity: 0.8;">© ${new Date().getFullYear()} ${COMPANY_NAME}. Reservados todos los derechos.</p>
+                  <span style="display: block; opacity: 0.6;">Este es un mensaje automático, por favor no lo respondas directamente.</span>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
   `;
 };
 
 /**
- * Ayudante para crear tarjetas de detalles (Blancas)
+ * Ayudante para crear tarjetas de detalles (Blancas y Centradas)
  */
 const getCardTemplate = (title, details, variant = 'gold') => {
   const accentColor = variant === 'red' ? '#bf7b56' : '#d4ac50';
   return `
-    <div style="background-color: white; padding: 35px; border-radius: 16px; margin: 30px 0; text-align: center; border: 1px solid #eaddca; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
-      <h3 style="color: ${accentColor}; font-size: 18px; margin: 0 0 15px 0; font-weight: 600; text-transform: capitalize;">${title}</h3>
-      <div style="color: #3a473d; font-size: 24px; font-weight: 300;">
-        ${details}
-      </div>
-    </div>
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin: 30px 0;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" style="background-color: #ffffff; border-radius: 18px; border: 1px solid #eaddca; box-shadow: 0 4px 15px rgba(0,0,0,0.03);" cellspacing="0" cellpadding="0" border="0">
+            <tr>
+              <td style="padding: 35px 20px; text-align: center;">
+                <h3 style="color: ${accentColor}; font-size: 18px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0 0 15px 0; font-weight: 600; text-transform: capitalize;">${title}</h3>
+                <div style="color: #3a473d; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 22px; font-weight: 300; line-height: 1.4;">
+                  ${details}
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
   `;
 };
 
@@ -92,9 +125,9 @@ export async function sendContactNotification(formData) {
   const mensaje = formData.get('mensaje');
 
   const content = `
-    <p style="font-size: 16px; color: #4a5a4d; text-align: center;">Has recibido un nuevo mensaje desde la web:</p>
+    <p style="font-size: 16px; text-align: center;">Has recibido un nuevo mensaje desde la web:</p>
     ${getCardTemplate(`${nombre} ${apellidos}`, `
-      <p style="font-size: 16px; margin: 5px 0; color: #76937c;"><a href="mailto:${email}" style="color: #76937c; text-decoration: none;">${email}</a></p>
+      <p style="font-size: 16px; margin: 5px 0;"><a href="mailto:${email}" style="color: #76937c; text-decoration: none;">${email}</a></p>
       <p style="font-size: 14px; margin: 5px 0; color: #8a7a5d;">${telefono}</p>
     `)}
     <p style="padding: 20px; background-color: #ffffff; border-radius: 12px; font-style: italic; color: #3a473d; border: 1px solid #eee; margin-top: 20px; text-align: center;">
@@ -115,12 +148,8 @@ export async function sendContactNotification(formData) {
  */
 export async function sendAppointmentAdminNotification(cita) {
   const { nombrePaciente, servicio, fechaHora } = cita;
-  const fechaStr = new Date(fechaHora).toLocaleDateString('es-ES', { 
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Europe/Madrid'
-  });
-  const horaStr = new Date(fechaHora).toLocaleTimeString('es-ES', { 
-    hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid'
-  });
+  const fechaStr = formatMadridDate(fechaHora, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  const horaStr = formatMadridTime(fechaHora);
 
   const content = `
     <p style="font-size: 16px; text-align: center;">¡Nueva reserva registrada!</p>
@@ -142,15 +171,11 @@ export async function sendAppointmentAdminNotification(cita) {
  */
 export async function sendAppointmentConfirmation(cita) {
   const { nombrePaciente, servicio, fechaHora } = cita;
-  const fechaStr = new Date(fechaHora).toLocaleDateString('es-ES', { 
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Europe/Madrid'
-  });
-  const horaStr = new Date(fechaHora).toLocaleTimeString('es-ES', { 
-    hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid'
-  });
+  const fechaStr = formatMadridDate(fechaHora, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  const horaStr = formatMadridTime(fechaHora);
 
   const content = `
-    <h2 style="color: #3a473d; font-weight: 400; text-align: center; margin-bottom: 30px;">¡Hola, ${nombrePaciente}!</h2>
+    <h2 style="color: #3a473d; font-weight: 400; text-align: center; margin-bottom: 25px;">¡Hola, ${nombrePaciente}!</h2>
     <p style="text-align: center;">Tu cita en <strong>Motivem</strong> ha sido confirmada correctamente. Aquí tienes los detalles:</p>
     
     ${getCardTemplate(servicio, `
@@ -161,7 +186,7 @@ export async function sendAppointmentConfirmation(cita) {
     <p style="font-size: 14px; color: #666; text-align: center; margin: 30px 0;">Si necesitas cancelar o modificar tu cita, por favor contacta con nosotros con al menos 24 horas de antelación.</p>
     
     <div style="text-align: center; margin-top: 40px;">
-      <a href="https://motivem.es" style="background-color: #76937c; color: white; padding: 16px 32px; text-decoration: none; border-radius: 35px; font-weight: 600; font-size: 15px; display: inline-block;">Visitar la Web</a>
+      <a href="https://motivem.es" style="background-color: #76937c; color: #ffffff; padding: 18px 36px; text-decoration: none; border-radius: 40px; font-weight: 600; font-size: 15px; display: inline-block;">Visitar la Web</a>
     </div>
   `;
 
@@ -177,15 +202,11 @@ export async function sendAppointmentConfirmation(cita) {
  */
 export async function sendAppointmentCancellation(cita) {
   const { nombrePaciente, servicio, fechaHora } = cita;
-  const fechaStr = new Date(fechaHora).toLocaleDateString('es-ES', { 
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Europe/Madrid'
-  });
-  const horaStr = new Date(fechaHora).toLocaleTimeString('es-ES', { 
-    hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid'
-  });
+  const fechaStr = formatMadridDate(fechaHora, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  const horaStr = formatMadridTime(fechaHora);
 
   const content = `
-    <h2 style="color: #3a473d; font-weight: 400; text-align: center; margin-bottom: 30px;">Hola, ${nombrePaciente}</h2>
+    <h2 style="color: #3a473d; font-weight: 400; text-align: center; margin-bottom: 25px;">Hola, ${nombrePaciente}</h2>
     <p style="text-align: center;">Te informamos que tu cita ha sido <strong>cancelada</strong>:</p>
     
     ${getCardTemplate(servicio, `
@@ -193,8 +214,8 @@ export async function sendAppointmentCancellation(cita) {
       <p style="margin: 0; opacity: 0.8; font-size: 20px;">a las ${horaStr}h</p>
     `, 'red')}
 
-    <p style="font-size: 15px; color: #666; text-align: center; background-color: white; padding: 20px; border-radius: 12px; border: 1px solid #eee;">
-      Si tienes cualquier duda o quieres reprogramar tu sesión, por favor contáctanos vía <strong>WhatsApp al 644 54 27 90</strong>.
+    <p style="font-size: 14px; color: #666; text-align: center; background-color: #ffffff; padding: 25px; border-radius: 12px; border: 1px solid #eee; margin-top: 30px;">
+      Si tienes cualquier duda o quieres reprogramar tu sesión, por favor contáctanos vía <b>WhatsApp al 644 54 27 90</b>.
     </p>
   `;
 
@@ -210,11 +231,11 @@ export async function sendAppointmentCancellation(cita) {
  */
 export async function sendPasswordResetEmail(email, nombre, resetUrl) {
   const content = `
-    <h2 style="color: #3a473d; font-weight: 400; text-align: center; margin-bottom: 30px;">¡Hola, ${nombre}!</h2>
+    <h2 style="color: #3a473d; font-weight: 400; text-align: center; margin-bottom: 25px;">¡Hola, ${nombre}!</h2>
     <p style="text-align: center;">Has solicitado restablecer tu contraseña en Motivem. Haz clic en el botón de abajo para continuar. Este enlace caducará en 1 hora.</p>
     
     <div style="text-align: center; margin: 45px 0;">
-      <a href="${resetUrl}" style="background-color: #d4ac50; color: white; padding: 18px 36px; text-decoration: none; border-radius: 35px; font-weight: bold; font-size: 16px; box-shadow: 0 4px 10px rgba(212, 172, 80, 0.3);">Restablecer Contraseña</a>
+      <a href="${resetUrl}" style="background-color: #d4ac50; color: #ffffff; padding: 20px 40px; text-decoration: none; border-radius: 40px; font-weight: bold; font-size: 16px; display: inline-block;">Restablecer Contraseña</a>
     </div>
 
     <p style="font-size: 12px; color: #94a3b8; text-align: center; margin-top: 40px; padding: 0 20px;">
