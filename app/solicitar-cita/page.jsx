@@ -59,7 +59,9 @@ export default function SolicitarCita() {
         setEstadoReserva(null);
 
         const datosForm = new FormData(evento.target);
-        datosForm.set('fechaHora', huecoSeleccionado);
+        // Combinamos la fecha YYYY-MM-DD con el hueco HH:mm
+        const fechaHoraFinal = `${fecha}T${huecoSeleccionado}:00`;
+        datosForm.set('fechaHora', fechaHoraFinal);
 
         const resultado = await crearCita(datosForm);
         
@@ -177,7 +179,6 @@ export default function SolicitarCita() {
                                         ) : huecos.length > 0 ? (
                                             <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3">
                                                 {huecos.map((hueco) => {
-                                                    const horaStr = new Date(hueco).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                                                     const estaSeleccionado = huecoSeleccionado === hueco;
                                                     return (
                                                         <button
@@ -190,7 +191,7 @@ export default function SolicitarCita() {
                                                                 : 'bg-white border-gray-200 text-gray-700 hover:border-[#cfa248] hover:bg-[#fffcf5]'
                                                             }`}
                                                         >
-                                                            {horaStr}
+                                                            {hueco}
                                                         </button>
                                                     );
                                                 })}
