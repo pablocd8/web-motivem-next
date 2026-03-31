@@ -115,8 +115,6 @@ export default function SolicitarCita() {
         );
     }
 
-
-
     return (
         <>
             <Header showLogo={true} />

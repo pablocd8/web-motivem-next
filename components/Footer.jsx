@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { FaInstagram, FaFacebookF, FaWhatsapp } from "react-icons/fa";
 
-const Footer = () => {
+const Footer = ({ className = "mt-8" }) => {
     return (
-        <footer className="mt-8">
+        <footer className={className}>
             {/* Contenedor de la Ola */}
             <div className="leading-[0] bg-transparent -mb-1">
                 <svg
