@@ -2,6 +2,7 @@ import { Quicksand } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import AosInit from "@/components/AosInit";
+import CookieBanner from "@/components/CookieBanner";
 
 const quicksand = Quicksand({
   subsets: ["latin"],
@@ -115,6 +116,7 @@ export default function RootLayout({ children }) {
       <body>
         <AuthProvider>
           <AosInit />
+          <CookieBanner />
           {children}
         </AuthProvider>
       </body>
