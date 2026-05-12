@@ -3,13 +3,11 @@ import connectDB from '@/lib/mongodb';
 import Material from '@/lib/models/material';
 import Usuario from '@/lib/models/usuarios';
 import { verifyToken } from '@/lib/auth';
-import { readFile } from 'fs/promises';
-import { existsSync } from 'fs';
-import path from 'path';
+import { supabase } from '@/lib/supabase';
 
-const MATERIALES_DIR = path.join(process.cwd(), 'files', 'materiales');
+const BUCKET_NAME = 'materiales';
 
-// GET: Descarga segura de un archivo por ID de material
+// GET: Descarga segura vía URL firmada de Supabase
 export async function GET(request, { params }) {
   const decoded = verifyToken(request);
   if (decoded.error) {
@@ -25,8 +23,7 @@ export async function GET(request, { params }) {
       return NextResponse.json({ error: 'Material no encontrado.' }, { status: 404 });
     }
 
-    // Comprobar acceso: el usuario solo puede descargar sus propios materiales,
-    // el admin puede descargar cualquiera.
+    // Comprobar acceso
     const solicitante = await Usuario.findById(decoded.userId).select('rol').lean();
     const esAdmin = solicitante?.rol === 'admin';
     const esSuyo = material.pacienteId.toString() === decoded.userId;
@@ -35,24 +32,21 @@ export async function GET(request, { params }) {
       return NextResponse.json({ error: 'Acceso denegado.' }, { status: 403 });
     }
 
-    const rutaArchivo = path.join(MATERIALES_DIR, material.nombreArchivo);
+    // Generar URL firmada de Supabase (válida por 60 segundos para la descarga)
+    const { data, error } = await supabase.storage
+      .from(BUCKET_NAME)
+      .createSignedUrl(material.nombreArchivo, 60, {
+        download: material.nombre // Sugerir nombre de descarga
+      });
 
-    if (!existsSync(rutaArchivo)) {
-      return NextResponse.json({ error: 'Archivo no encontrado en el servidor.' }, { status: 404 });
+    if (error) {
+      console.error('Error al generar URL firmada:', error);
+      return NextResponse.json({ error: 'Error al obtener el archivo de la nube.' }, { status: 500 });
     }
 
-    const fileBuffer = await readFile(rutaArchivo);
-    const ext = path.extname(material.nombreArchivo);
-    const nombreDescarga = encodeURIComponent(material.nombre) + ext;
-
-    return new NextResponse(fileBuffer, {
-      status: 200,
-      headers: {
-        'Content-Type': material.tipo,
-        'Content-Disposition': `attachment; filename*=UTF-8''${nombreDescarga}`,
-        'Content-Length': fileBuffer.length.toString(),
-      },
-    });
+    // Redirigir a la URL de Supabase para que comience la descarga
+    return NextResponse.redirect(data.signedUrl);
+    
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

@@ -144,6 +144,47 @@ export async function sendContactNotification(formData) {
 }
 
 /**
+ * 1.b Notificación de Taller Personalizado (para el Admin)
+ */
+export async function sendWorkshopNotification(formData) {
+  const responsable = formData.get('responsable');
+  const email = formData.get('email');
+  const telefono = formData.get('telefono');
+  const tematica = formData.get('tematica');
+  const edad = formData.get('edad');
+  const numIntegrantes = formData.get('num_integrantes');
+  const observaciones = formData.get('observaciones') || 'Sin observaciones adicionales';
+
+  const content = `
+    <p style="font-size: 16px; text-align: center;">¡Nueva solicitud de taller personalizado!</p>
+    
+    ${getCardTemplate('Detalles del Taller', `
+      <p style="font-size: 16px; margin: 5px 0;"><strong>Temática:</strong> ${tematica}</p>
+      <p style="font-size: 16px; margin: 5px 0;"><strong>Edad:</strong> ${edad}</p>
+      <p style="font-size: 16px; margin: 5px 0;"><strong>Integrantes:</strong> ${numIntegrantes} personas</p>
+    `)}
+
+    ${getCardTemplate('Datos de Contacto', `
+      <p style="font-size: 18px; margin: 0; font-weight: 600;">${responsable}</p>
+      <p style="font-size: 16px; margin: 10px 0;"><a href="mailto:${email}" style="color: #76937c; text-decoration: none;">${email}</a></p>
+      <p style="font-size: 14px; margin: 0; color: #8a7a5d;">Tel: ${telefono}</p>
+    `)}
+
+    <div style="padding: 25px; background-color: #ffffff; border-radius: 12px; color: #3a473d; border: 1px solid #eaddca; margin-top: 20px;">
+      <p style="margin: 0 0 10px 0; font-weight: 600; color: #cfa248; text-transform: uppercase; font-size: 12px; letter-spacing: 1px;">Observaciones:</p>
+      <p style="margin: 0; font-style: italic; line-height: 1.6;">"${observaciones}"</p>
+    </div>
+  `;
+
+  return sendResendEmail({
+    to: ADMIN_EMAIL,
+    subject: `Taller Personalizado: ${tematica} - ${responsable}`,
+    replyTo: email,
+    html: getBaseTemplate('Solicitud de Taller', content)
+  });
+}
+
+/**
  * 2. Notificación de Nueva Cita (para el Admin)
  */
 export async function sendAppointmentAdminNotification(cita) {
@@ -254,5 +295,11 @@ export async function sendPasswordResetEmail(email, nombre, resetUrl) {
  * Compatible con formularios genéricos
  */
 export async function sendEmail(formData) {
+  const asunto = formData.get('asunto');
+  
+  if (asunto === 'Nueva Solicitud de Taller Personalizado') {
+    return sendWorkshopNotification(formData);
+  }
+  
   return sendContactNotification(formData);
 }

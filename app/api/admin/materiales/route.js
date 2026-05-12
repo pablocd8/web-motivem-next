@@ -3,12 +3,9 @@ import connectDB from '@/lib/mongodb';
 import Material from '@/lib/models/material';
 import Usuario from '@/lib/models/usuarios';
 import { verifyToken } from '@/lib/auth';
-import { writeFile, unlink } from 'fs/promises';
-import { existsSync } from 'fs';
-import path from 'path';
+import { supabase } from '@/lib/supabase';
 import { randomUUID } from 'crypto';
-
-const MATERIALES_DIR = path.join(process.cwd(), 'files', 'materiales');
+import path from 'path';
 
 const TIPOS_PERMITIDOS = [
   'application/pdf',
@@ -24,6 +21,7 @@ const TIPOS_PERMITIDOS = [
 ];
 
 const MAX_TAMANO = 20 * 1024 * 1024; // 20 MB
+const BUCKET_NAME = 'Materiales';
 
 async function verificarAdmin(request) {
   const decoded = verifyToken(request);
@@ -37,29 +35,24 @@ async function verificarAdmin(request) {
   return { userId: decoded.userId };
 }
 
-// GET: Lista todos los pacientes (rol usuario) con sus materiales
+// GET: Lista todos los pacientes y opcionalmente materiales de uno
 export async function GET(request) {
   const auth = await verificarAdmin(request);
   if (auth.error) return NextResponse.json({ error: auth.error }, { status: auth.status });
 
   try {
     await connectDB();
-
-    // Obtener todos los usuarios con rol 'usuario'
     const pacientes = await Usuario.find({ rol: 'usuario' })
       .select('_id nombre apellido email')
       .sort({ apellido: 1, nombre: 1 })
       .lean();
 
-    // Obtener el parámetro de filtro por paciente si existe
     const { searchParams } = new URL(request.url);
     const pacienteId = searchParams.get('pacienteId');
 
     let materiales = [];
     if (pacienteId) {
-      materiales = await Material.find({ pacienteId })
-        .sort({ createdAt: -1 })
-        .lean();
+      materiales = await Material.find({ pacienteId }).sort({ createdAt: -1 }).lean();
     }
 
     return NextResponse.json({ success: true, pacientes, materiales });
@@ -68,61 +61,60 @@ export async function GET(request) {
   }
 }
 
-// POST: Subir un archivo para un paciente
+// POST: Subir un archivo a Supabase Storage
 export async function POST(request) {
   const auth = await verificarAdmin(request);
   if (auth.error) return NextResponse.json({ error: auth.error }, { status: auth.status });
 
   try {
     await connectDB();
-
     const formData = await request.formData();
     const archivo = formData.get('archivo');
     const pacienteId = formData.get('pacienteId');
     const nombreVisible = formData.get('nombre') || archivo?.name || 'Documento';
 
     if (!archivo || !pacienteId) {
-      return NextResponse.json(
-        { error: 'Se requiere un archivo y un paciente.' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Faltan datos.' }, { status: 400 });
     }
 
-    // Validar tipo
     if (!TIPOS_PERMITIDOS.includes(archivo.type)) {
-      return NextResponse.json(
-        { error: 'Tipo de archivo no permitido.' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Tipo de archivo no permitido.' }, { status: 400 });
     }
 
-    // Validar tamaño
     if (archivo.size > MAX_TAMANO) {
-      return NextResponse.json(
-        { error: 'El archivo supera el tamaño máximo de 20 MB.' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Máximo 20 MB.' }, { status: 400 });
     }
 
-    // Verificar que el paciente existe
     const paciente = await Usuario.findById(pacienteId).select('email').lean();
-    if (!paciente) {
-      return NextResponse.json({ error: 'Paciente no encontrado.' }, { status: 404 });
-    }
+    if (!paciente) return NextResponse.json({ error: 'Paciente no encontrado.' }, { status: 404 });
 
-    // Generar nombre único en disco
+    // 1. Preparar archivo para Supabase
     const ext = path.extname(archivo.name);
     const nombreArchivo = `${randomUUID()}${ext}`;
-    const rutaCompleta = path.join(MATERIALES_DIR, nombreArchivo);
+    
+    // Aseguramos que la ruta no tenga espacios ni empiece por barra
+    const filePath = `${pacienteId}/${nombreArchivo}`.replace(/\s/g, '_'); 
+    
+    console.log('Subiendo a Supabase:', BUCKET_NAME, filePath);
 
-    // Guardar en disco
-    const buffer = Buffer.from(await archivo.arrayBuffer());
-    await writeFile(rutaCompleta, buffer);
+    // 2. Convertir a Buffer (más estable en entornos Node.js/Vercel)
+    const arrayBuffer = await archivo.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
-    // Guardar metadatos en BD
+    // 3. Subir a Supabase Storage
+    const { data, error: uploadError } = await supabase.storage
+      .from(BUCKET_NAME)
+      .upload(filePath, buffer, {
+        contentType: archivo.type,
+        upsert: false
+      });
+
+    if (uploadError) throw new Error(`Error Supabase: ${uploadError.message}`);
+
+    // 3. Guardar en MongoDB
     const material = await Material.create({
       nombre: nombreVisible,
-      nombreArchivo,
+      nombreArchivo: filePath, // Guardamos la ruta de Supabase
       tipo: archivo.type,
       tamano: archivo.size,
       pacienteId,
@@ -132,11 +124,12 @@ export async function POST(request) {
 
     return NextResponse.json({ success: true, material }, { status: 201 });
   } catch (error) {
+    console.error('Error en POST materiales:', error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
 
-// DELETE: Eliminar un material por ID
+// DELETE: Eliminar de Supabase y MongoDB
 export async function DELETE(request) {
   const auth = await verificarAdmin(request);
   if (auth.error) return NextResponse.json({ error: auth.error }, { status: auth.status });
@@ -145,22 +138,20 @@ export async function DELETE(request) {
     await connectDB();
     const { materialId } = await request.json();
 
-    if (!materialId) {
-      return NextResponse.json({ error: 'Se requiere materialId.' }, { status: 400 });
-    }
+    const material = await Material.findById(materialId);
+    if (!material) return NextResponse.json({ error: 'No encontrado.' }, { status: 404 });
 
-    const material = await Material.findByIdAndDelete(materialId);
-    if (!material) {
-      return NextResponse.json({ error: 'Material no encontrado.' }, { status: 404 });
-    }
+    // 1. Eliminar de Supabase
+    const { error: deleteError } = await supabase.storage
+      .from(BUCKET_NAME)
+      .remove([material.nombreArchivo]);
 
-    // Eliminar archivo del disco si existe
-    const rutaArchivo = path.join(MATERIALES_DIR, material.nombreArchivo);
-    if (existsSync(rutaArchivo)) {
-      await unlink(rutaArchivo);
-    }
+    if (deleteError) console.error('Error al borrar en Supabase:', deleteError);
 
-    return NextResponse.json({ success: true, message: 'Material eliminado.' });
+    // 2. Eliminar de MongoDB
+    await Material.findByIdAndDelete(materialId);
+
+    return NextResponse.json({ success: true, message: 'Eliminado.' });
   } catch (error) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
