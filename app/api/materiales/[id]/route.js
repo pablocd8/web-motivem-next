@@ -5,9 +5,8 @@ import Usuario from '@/lib/models/usuarios';
 import { verifyToken } from '@/lib/auth';
 import { supabase } from '@/lib/supabase';
 
-const BUCKET_NAME = 'materiales';
+const BUCKET_NAME = 'Materiales';
 
-// GET: Descarga segura vía URL firmada de Supabase
 export async function GET(request, { params }) {
   const decoded = verifyToken(request);
   if (decoded.error) {
@@ -32,22 +31,27 @@ export async function GET(request, { params }) {
       return NextResponse.json({ error: 'Acceso denegado.' }, { status: 403 });
     }
 
-    // Generar URL firmada de Supabase (válida por 60 segundos para la descarga)
+    // 1. Descargar el archivo directamente de Supabase al Servidor
     const { data, error } = await supabase.storage
       .from(BUCKET_NAME)
-      .createSignedUrl(material.nombreArchivo, 60, {
-        download: material.nombre // Sugerir nombre de descarga
-      });
+      .download(material.nombreArchivo);
 
     if (error) {
-      console.error('Error al generar URL firmada:', error);
-      return NextResponse.json({ error: 'Error al obtener el archivo de la nube.' }, { status: 500 });
+      console.error('Error al descargar de Supabase:', error);
+      return NextResponse.json({ error: 'No se pudo recuperar el archivo de la nube.' }, { status: 500 });
     }
 
-    // Redirigir a la URL de Supabase para que comience la descarga
-    return NextResponse.redirect(data.signedUrl);
+    // 2. Crear la respuesta con los datos binarios del archivo
+    const response = new NextResponse(data);
+
+    // 3. Configurar cabeceros para forzar la descarga con el nombre correcto
+    response.headers.set('Content-Type', material.tipo || 'application/octet-stream');
+    response.headers.set('Content-Disposition', `attachment; filename="${material.nombre}"`);
+
+    return response;
     
   } catch (error) {
+    console.error('Error en API descarga:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
