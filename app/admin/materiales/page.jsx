@@ -130,12 +130,22 @@ export default function AdminMateriales() {
   }
 
   async function descargar(id, nombre) {
-    const r = await fetch(`/api/materiales/${id}`, { headers });
-    const blob = await r.blob();
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = nombre; a.click();
-    URL.revokeObjectURL(url);
+    try {
+      const r = await fetch(`/api/materiales/${id}`, { headers });
+      if (!r.ok) throw new Error('Error en descarga');
+      const blob = await r.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = nombre;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error en descarga:', error);
+      alert('No se pudo descargar el archivo.');
+    }
   }
 
   const pacientesFiltrados = pacientes.filter(p =>
@@ -197,15 +207,13 @@ export default function AdminMateriales() {
                     <button
                       key={p._id}
                       onClick={() => seleccionarPaciente(p)}
-                      className={`w-full flex items-center gap-3 px-3 py-3.5 rounded-xl text-left transition-all my-1 ${
-                        pacienteSeleccionado?._id === p._id
+                      className={`w-full flex items-center gap-3 px-3 py-3.5 rounded-xl text-left transition-all my-1 ${pacienteSeleccionado?._id === p._id
                           ? 'bg-[#cfa248]/10 border-2 border-[#cfa248]/50'
                           : 'hover:bg-[#f5eedc] border-2 border-transparent'
-                      }`}
+                        }`}
                     >
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                        pacienteSeleccionado?._id === p._id ? 'bg-[#cfa248] text-white' : 'bg-[#6e9277]/10 text-[#6e9277]'
-                      }`}>
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${pacienteSeleccionado?._id === p._id ? 'bg-[#cfa248] text-white' : 'bg-[#6e9277]/10 text-[#6e9277]'
+                        }`}>
                         <User size={18} />
                       </div>
                       <div className="min-w-0">
@@ -255,11 +263,10 @@ export default function AdminMateriales() {
                       onDragLeave={() => setDrag(false)}
                       onDrop={(e) => { e.preventDefault(); setDrag(false); const f = e.dataTransfer.files[0]; if (f) manejarArchivo(f); }}
                       onClick={() => inputRef.current?.click()}
-                      className={`relative border-2 border-dashed rounded-2xl p-7 text-center cursor-pointer transition-all duration-200 ${
-                        drag ? 'border-[#cfa248] bg-[#cfa248]/5 scale-[1.01]'
-                        : archivo ? 'border-[#6e9277] bg-[#6e9277]/5'
-                        : 'border-[#d4c3a3] hover:border-[#cfa248]/60 hover:bg-[#fcf8f1]'
-                      }`}
+                      className={`relative border-2 border-dashed rounded-2xl p-7 text-center cursor-pointer transition-all duration-200 ${drag ? 'border-[#cfa248] bg-[#cfa248]/5 scale-[1.01]'
+                          : archivo ? 'border-[#6e9277] bg-[#6e9277]/5'
+                            : 'border-[#d4c3a3] hover:border-[#cfa248]/60 hover:bg-[#fcf8f1]'
+                        }`}
                     >
                       <input
                         ref={inputRef} type="file" className="hidden"
@@ -307,11 +314,10 @@ export default function AdminMateriales() {
 
                     {/* Feedback */}
                     {msg.texto && (
-                      <div className={`mt-4 p-3 rounded-xl flex items-center gap-2 text-sm font-medium ${
-                        msg.tipo === 'ok'
+                      <div className={`mt-4 p-3 rounded-xl flex items-center gap-2 text-sm font-medium ${msg.tipo === 'ok'
                           ? 'bg-green-50 text-green-700 border border-green-100'
                           : 'bg-red-50 text-red-700 border border-red-100'
-                      }`}>
+                        }`}>
                         {msg.tipo === 'ok' ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
                         {msg.texto}
                       </div>
@@ -320,11 +326,10 @@ export default function AdminMateriales() {
                     <button
                       onClick={subirArchivo}
                       disabled={!archivo || subiendo}
-                      className={`mt-4 flex items-center gap-2 px-6 py-3 text-sm font-bold text-white rounded-xl transition-all duration-200 ${
-                        !archivo || subiendo
+                      className={`mt-4 flex items-center gap-2 px-6 py-3 text-sm font-bold text-white rounded-xl transition-all duration-200 ${!archivo || subiendo
                           ? 'bg-gray-300 cursor-not-allowed'
                           : 'bg-[#cfa248] hover:bg-[#bf7b56] hover:shadow-lg hover:scale-[1.02]'
-                      }`}
+                        }`}
                     >
                       {subiendo ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
                       {subiendo ? 'Subiendo...' : 'Subir documento'}
