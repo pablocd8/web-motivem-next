@@ -45,7 +45,7 @@ const Body = () => {
                             className="w-full max-w-md rounded"
                             sizes="(max-width: 768px) 100vw, 33vw"
                         />
-                        <Link href="/crear-taller" className="mt-4 px-6 py-2 border border-[#bf7b56] text-[#bf7b56] hover:bg-[#bf7b56] hover:text-white transition-colors duration-300 rounded">
+                        <Link href="/disena-tu-taller" className="mt-4 px-6 py-2 border border-[#bf7b56] text-[#bf7b56] hover:bg-[#bf7b56] hover:text-white transition-colors duration-300 rounded">
                             SABER MÁS
                         </Link>
                     </div>
