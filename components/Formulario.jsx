@@ -26,11 +26,22 @@ const Formulario = () => {
 
     return (
         <div className="w-full px-4 mt-12 mb-20">
-            <div className="max-w-4xl mx-auto bg-[#efdfc2] rounded-3xl shadow-2xl p-8 md:p-12 border border-[#d4c3a3]/30">
 
-                <h2 className="text-[#cfa248] text-2xl font-bold mb-8 text-center md:text-left">
-                    Escríbenos y te llamaremos para saber cómo podemos ayudar
+            {/* TÍTULO DE SECCIÓN */}
+            <div className="text-center mb-12">
+                <p className="text-xs font-bold tracking-[0.25em] uppercase text-[#cfa248] mb-3">
+                    Contacto
+                </p>
+                <h2 className="text-4xl md:text-5xl font-bold text-[#3d2c1e] mb-3">
+                    ¿Hablamos?
                 </h2>
+                <p className="text-[#5a6a5d] text-base mb-4">
+                    Escríbenos y te llamaremos para saber cómo podemos ayudarte.
+                </p>
+                <span className="inline-block w-2 h-2 rounded-full bg-[#cfa248]"></span>
+            </div>
+
+            <div className="max-w-4xl mx-auto bg-[#efdfc2] rounded-3xl shadow-2xl p-8 md:p-12 border border-[#d4c3a3]/30">
 
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 text-left">
 
@@ -124,9 +135,8 @@ const Formulario = () => {
                         <button
                             type="submit"
                             disabled={isPending}
-                            className={`p-4 text-base font-semibold text-white bg-[#cfa248] hover:bg-[#bf7b56] rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-[1.02] ${
-                                isPending ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
-                            }`}
+                            className={`p-4 text-base font-semibold text-white bg-[#cfa248] hover:bg-[#bf7b56] rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-[1.02] ${isPending ? 'opacity-60 cursor-not-allowed' : 'cursor-pointer'
+                                }`}
                         >
                             {isPending ? 'Enviando...' : 'Enviar mensaje'}
                         </button>

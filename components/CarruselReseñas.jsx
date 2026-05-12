@@ -27,6 +27,18 @@ const CarruselReseñas = () => {
     <>
       <section className="py-12 -mt-65">
         <div className="max-w-4xl mx-auto px-4">
+
+          {/* TÍTULO DE SECCIÓN */}
+          <div className="text-center mb-10">
+            <p className="text-xs font-bold tracking-[0.25em] uppercase text-[#cfa248] mb-3">
+              Testimonios
+            </p>
+            <h2 className="text-4xl md:text-5xl font-bold text-[#3d2c1e] mb-4">
+              Lo que dicen de nosotros
+            </h2>
+            <span className="inline-block w-2 h-2 rounded-full bg-[#cfa248]"></span>
+          </div>
+
           <Swiper
             style={{ '--swiper-navigation-color': 'rgba(255, 255, 255, 0.5)' }}
             modules={[Navigation, Pagination, A11y, Autoplay]}
@@ -52,11 +64,11 @@ const CarruselReseñas = () => {
           <div className="text-center mt-8">
             <a
               href="https://share.google/rHdUAeBxOJRN5Ahxc"
-              className="inline-block px-6 py-2 border border-[#6e9277] text-[#6e9277] hover:bg-[#6e9277] hover:text-white transition-colors duration-300 cursor-pointer rounded"
+              className="inline-flex items-center gap-2 px-6 py-2 border border-[#6e9277] text-[#6e9277] hover:bg-[#6e9277] hover:text-white transition-colors duration-300 cursor-pointer rounded-full text-sm font-medium"
               target="_blank"
               rel="noopener noreferrer"
             >
-              AÑADE UNA RESEÑA
+             Añade una reseña
             </a>
           </div>
         </div>

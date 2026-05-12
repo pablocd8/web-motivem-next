@@ -10,13 +10,13 @@ export const metadata = {
 };
 
 export default function Home() {
-    return (
-        <>
-            <Header showLogo={true} />
-            <Body />
-            <CarruselFotosMotivem />
-            <CarruselReseñas />
-            <Footer />
-        </>
-    );
+  return (
+    <>
+      <Header showLogo={true} />
+      <Body />
+      <CarruselFotosMotivem />
+      <CarruselReseñas />
+      <Footer />
+    </>
+  );
 }

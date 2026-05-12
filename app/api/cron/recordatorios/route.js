@@ -7,10 +7,9 @@ export const dynamic = 'force-dynamic';
 
 /**
  * Cron job para enviar recordatorios de cita 48 horas antes.
- * Se recomienda ejecutarlo cada hora.
  */
 export async function GET(request) {
-  // Verificación básica de seguridad (opcional, configurar CRON_SECRET en Vercel)
+  // Verificación básica de seguridad
   const authHeader = request.headers.get('authorization');
   if (process.env.CRON_SECRET && authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return new Response('No autorizado', { status: 401 });
@@ -35,10 +34,10 @@ export async function GET(request) {
       // Buscamos todas las citas que ocurren entre 48h y 72h desde hoy a las 00:00
       // Esto capturará todas las citas del día "pasado mañana"
       const inicioRango = new Date(hoyACero);
-      inicioRango.setHours(inicioRango.getHours() + 48); // +48h
+      inicioRango.setHours(inicioRango.getHours() + 48); 
       
       const finRango = new Date(hoyACero);
-      finRango.setHours(finRango.getHours() + 72); // +72h (fin del día)
+      finRango.setHours(finRango.getHours() + 72); 
       
       query.fechaHora = { $gte: inicioRango, $lt: finRango };
     }
