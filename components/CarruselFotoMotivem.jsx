@@ -27,6 +27,17 @@ const CarruselFotosMotivem = () => {
             <div className="w-full bg-[#efdfc2] py-16 -mt-70">
                 <div className="max-w-6xl mx-auto px-6">
 
+                    {/* TÍTULO DE SECCIÓN */}
+                    <div className="text-center mb-10">
+                        <p className="text-xs font-bold tracking-[0.25em] uppercase text-[#6e9277] mb-3">
+                            Conócenos
+                        </p>
+                        <h2 className="text-4xl md:text-5xl font-bold text-[#3d2c1e] mb-4">
+                            Nuestro espacio
+                        </h2>
+                        <span className="inline-block w-2 h-2 rounded-full bg-[#6e9277]"></span>
+                    </div>
+
                     {/* CONTENEDOR CARRUSEL */}
                     <div className="relative overflow-hidden rounded-[40px] shadow-lg">
 
@@ -72,8 +83,8 @@ const CarruselFotosMotivem = () => {
                                     key={index}
                                     onClick={() => setCurrent(index)}
                                     className={`w-3 h-3 rounded-full transition ${current === index
-                                            ? "bg-[#6e9277]"
-                                            : "bg-white/70"
+                                        ? "bg-[#6e9277]"
+                                        : "bg-white/70"
                                         }`}
                                 />
                             ))}

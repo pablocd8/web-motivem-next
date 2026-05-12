@@ -39,7 +39,7 @@ async function sendResendEmail({ to, subject, html, replyTo }) {
 }
 
 /**
- * Plantilla base para emails de Motivem (Diseño Premium 2026 - Versión Robusta)
+ * Plantilla base para emails de Motivem 
  */
 const getBaseTemplate = (title, content, variant = 'gold') => {
   const primaryColor = variant === 'red' ? '#bf7b56' : '#d4ac50';
@@ -90,7 +90,7 @@ const getBaseTemplate = (title, content, variant = 'gold') => {
 };
 
 /**
- * Ayudante para crear tarjetas de detalles (Blancas y Centradas)
+ tarjetas de detalles (Blancas y Centradas)
  */
 const getCardTemplate = (title, details, variant = 'gold') => {
   const accentColor = variant === 'red' ? '#bf7b56' : '#d4ac50';

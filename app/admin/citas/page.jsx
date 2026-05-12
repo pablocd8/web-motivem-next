@@ -59,7 +59,7 @@ export default function AdminCitas() {
             <h1 className="text-3xl md:text-4xl font-bold text-[#3a473d] uppercase tracking-widest mb-2">Gestión de Citas</h1>
             <p className="text-[#cfa248] font-medium text-sm md:text-base">Panel de control del psicólogo</p>
           </div>
-          
+
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-xl border border-[#d4c3a3] overflow-hidden">
             {/* Vista Escritorio (Escondido en móvil) */}
             <div className="hidden md:block overflow-x-auto">
@@ -97,16 +97,15 @@ export default function AdminCitas() {
                         </span>
                       </td>
                       <td className="p-6 text-center">
-                        <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter shadow-sm border ${
-                          cita.estado === 'confirmada' ? 'bg-green-50 text-green-600 border-green-200' :
+                        <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter shadow-sm border ${cita.estado === 'confirmada' ? 'bg-green-50 text-green-600 border-green-200' :
                           cita.estado === 'pendiente' ? 'bg-yellow-50 text-yellow-600 border-yellow-200' :
-                          cita.estado === 'cancelada' ? 'bg-red-50 text-red-600 border-red-200' : 'bg-gray-50 text-gray-500 border-gray-200'
-                        }`}>
+                            cita.estado === 'cancelada' ? 'bg-red-50 text-red-600 border-red-200' : 'bg-gray-50 text-gray-500 border-gray-200'
+                          }`}>
                           {cita.estado}
                         </span>
                       </td>
                       <td className="p-6 text-center">
-                        <select 
+                        <select
                           onChange={(e) => actualizarEstado(cita._id, e.target.value)}
                           value={cita.estado}
                           className="text-xs border-2 border-[#d4c3a3] rounded-xl p-2 bg-white text-[#3a473d] font-bold shadow-sm hover:border-[#cfa248] outline-none transition cursor-pointer"
@@ -136,11 +135,10 @@ export default function AdminCitas() {
                       <div className="font-bold text-[#3a473d] text-lg leading-tight">{cita.nombrePaciente}</div>
                       <div className="text-xs text-[#76937c] font-semibold mt-1">{cita.telefonoPaciente}</div>
                     </div>
-                    <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter shadow-sm border ${
-                      cita.estado === 'confirmada' ? 'bg-green-50 text-green-600 border-green-200' :
+                    <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-tighter shadow-sm border ${cita.estado === 'confirmada' ? 'bg-green-50 text-green-600 border-green-200' :
                       cita.estado === 'pendiente' ? 'bg-yellow-50 text-yellow-600 border-yellow-200' :
-                      cita.estado === 'cancelada' ? 'bg-red-50 text-red-600 border-red-200' : 'bg-gray-50 text-gray-500 border-gray-200'
-                    }`}>
+                        cita.estado === 'cancelada' ? 'bg-red-50 text-red-600 border-red-200' : 'bg-gray-50 text-gray-500 border-gray-200'
+                      }`}>
                       {cita.estado}
                     </span>
                   </div>
@@ -164,7 +162,7 @@ export default function AdminCitas() {
                   </div>
 
                   <div className="mt-2">
-                    <select 
+                    <select
                       onChange={(e) => actualizarEstado(cita._id, e.target.value)}
                       value={cita.estado}
                       className="w-full text-sm border-2 border-[#d4c3a3] rounded-xl p-3 bg-white text-[#3a473d] font-bold shadow-md hover:border-[#cfa248] outline-none transition cursor-pointer"

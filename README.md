@@ -2,7 +2,7 @@
 
 <div align="center">
   <br />
-  <strong>[Ver Demo en Vivo](https://web-motivem-next.vercel.app/)</strong>
+  <strong>[www.motivem.es](https://www.motivem.es/)</strong>
   <br /><br />
 </div>
 
@@ -24,6 +24,10 @@ Este proyecto ha sido desarrollado aplicando las últimas versiones de las tecno
 
 * ✅ **Autenticación Completa (Full-Stack):** Sistema de Registro y Login seguro con JWT. Las contraseñas se almacenan encriptadas (*hash* + *salt*) en la BD.
 * ✅ **Rutas Protegidas:** Sistema de seguridad backend donde la descarga de archivos PDF solo se autoriza mediante validación de tokens en los *Headers* (Endpoint `/api/pdf/descargar`).
+* ✅ **Gestión de Citas (Admin):** Panel de administración avanzado para gestionar citas médicas (confirmar, cancelar, completar) con filtros de estado y visualización optimizada para móvil y escritorio.
+* ✅ **Notificaciones Automáticas:** Sistema integrado con Resend para el envío automático de correos electrónicos de confirmación y cancelación de citas a los pacientes.
+* ✅ **Gestión de Materiales (Admin):** Panel de control exclusivo para administradores que permite subir, listar y eliminar archivos (PDF, Word, Imágenes) asignados a pacientes específicos.
+* ✅ **Área Personal de Materiales (Usuario):** Los usuarios pueden acceder a una sección privada en su perfil (`/perfil`) para visualizar y descargar los documentos que el administrador ha compartido con ellos.
 * ✅ **Diseño *Responsive* Avanzado:** Interfaz fluida programada "Mobile-First" utilizando las clases de utilidad de Tailwind CSS.
 * ✅ **Arquitectura Separada por Entornos:** Configuración profesional que enlaza el entorno local a un Docker de pruebas (`docker-compose up`) y el entorno de producción a MongoDB Atlas mediante variables ocultas en Vercel.
 * ✅ **Patrón Singleton BD:** La conexión a la base de datos está programada para mantener una única instancia viva y evitar problemas de límite de peticiones en despliegues Serverless.
@@ -91,16 +95,28 @@ web-motivem-next/
 ├── app/                      # 🛣️ Frontend y Backend (App Router)
 │   ├── api/                  # ⚙️ Endpoints del backend integrado (Serverless)
 │   │   ├── auth/             # Controladores de Login y Registro
-│   │   └── pdf/              # Endpoints privados (Middlewares verificadores de Token)
+│   │   ├── admin/            # Gestión administrativa (Citas, Materiales)
+│   │   │   ├── citas/        # API para CRUD y cambio de estado de citas
+│   │   │   └── materiales/   # API para subida y borrado de archivos
+│   │   └── materiales/       # Endpoints de acceso y descarga de archivos personales
 │   │
-│   ├── (rutas de la web)/    # 🎨 Páginas públicas de la aplicación
+│   ├── (rutas de la web)/    # 🎨 Páginas públicas y privadas
+│   │   ├── admin/            # Panel de Control (Citas y Materiales)
+│   │   │   ├── citas/        # Gestión de agenda y estados de citas
+│   │   │   └── materiales/   # Gestión de documentos por paciente
 │   │   ├── login/
 │   │   ├── register/
+│   │   ├── perfil/           # Área personal (Contraseña y "Mis Materiales")
+│   │   ├── solicitar-cita/   # Sistema de reserva de citas con validación de horarios
 │   │   ├── servicios/
 │   │   └── guia-familias/
 │   │
 │   ├── globals.css           # 💅 Estilos globales (Tailwind CSS configurado)
 │   └── layout.js             # 🏗️ Layout maestro (Providers JWT incrustados)
+│
+├── actions/                  # 📧 Acciones de servidor (Envío de Emails, lógica de citas)
+│   ├── sendEmail.js          # Integración con Resend para notificaciones
+│   └── accionesCita.js       # Lógica transaccional de citas
 │
 ├── components/               # 🧩 Componentes UI Reutilizables y dinámicos
 │   └── (varios)/             # Carruseles Swiper, Header responsive, Mapas iFrame
@@ -109,12 +125,14 @@ web-motivem-next/
 │   └── AuthContext.jsx       # Gestión y validación de sesiones JWT en LocalStorage
 │
 ├── lib/                      # 🧰 Librerías y utilidades core (Lógica pura)
-│   ├── models/               # Esquemas estrictos de Mongoose (Validaciones previas BD)
+│   ├── models/               # Esquemas de Mongoose (Usuarios, Citas, Materiales)
 │   ├── mongodb.js            # Conexión Singleton (Patrón arquitectónico de BD)
-│   └── auth.js               # Encriptación de Payloads y firmas de seguridad (JWT)
+│   ├── auth.js               # Encriptación de Payloads y firmas de seguridad (JWT)
+│   └── supabase.js           # (Opcional) Cliente para almacenamiento persistente en la nube
 │
 ├── public/                   # 🖼️ Assets públicos (Logos, imágenes)
-├── files/                    # 📄 Assets privados para clientes
+├── files/                    # 📄 Almacenamiento local de materiales
+│   └── materiales/           # Documentos subidos para pacientes
 │
 ├── .env.example              # 🔐 Contrato con otros devs (Qué variables necesita la app)
 ├── docker-compose.yml        # 🐳 Orquestación de infraestructura local (BD Node + GUI DB)

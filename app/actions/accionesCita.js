@@ -17,7 +17,7 @@ export async function obtenerHuecosLibres(fechaString) {
     // Usamos fecha local para evitar desfases de zona horaria al comparar 'YYYY-MM-DD'
     const [year, month, day] = fechaString.split('-').map(Number);
     const fechaSeleccionada = new Date(year, month - 1, day);
-    const diaSemana = fechaSeleccionada.getDay(); // 0: Domingo, 6: Sábado
+    const diaSemana = fechaSeleccionada.getDay();
 
     // 1. Validar Fin de Semana
     if (diaSemana === 0 || diaSemana === 6) {
@@ -29,7 +29,7 @@ export async function obtenerHuecosLibres(fechaString) {
       return { success: true, huecos: [], mensaje: 'Este día es festivo en Ontinyent. No hay citas disponibles.' };
     }
 
-    // Definir inicio y fin de día de Madrid en UTC para la consulta
+    // Definir inicio y fin de día de Madrid 
     const inicioDia = parseMadridDate(`${fechaString}T00:00:00`);
     const finDia = parseMadridDate(`${fechaString}T23:59:59`);
 
@@ -55,7 +55,7 @@ export async function obtenerHuecosLibres(fechaString) {
       if (slotMadrid > ahora) {
         // Filtrar si es una exclusión específica para este día
         if (!exclusiones.includes(horaStr)) {
-          // Filtrar si ya está ocupado (comparando tiempos UTC exactos)
+          // Filtrar si ya está ocupado 
           const ocupado = citasExistentes.some(c => {
             return new Date(c.fechaHora).getTime() === slotMadrid.getTime();
           });
@@ -85,7 +85,7 @@ export async function crearCita(formData) {
     const email = formData.get('email');
     const telefono = formData.get('telefono');
     const servicio = formData.get('servicio');
-    const fechaHora = formData.get('fechaHora'); // Viene como "YYYY-MM-DDTHH:mm:ss"
+    const fechaHora = formData.get('fechaHora'); 
     const notas = formData.get('notas');
 
     // Parseamos forzando zona horaria de Madrid
@@ -128,7 +128,7 @@ export async function crearCita(formData) {
       notas
     });
 
-    // Enviar notificaciones (las funciones en sendEmail ya usarán Intl para Madrid)
+    // Enviar notificaciones
     await sendAppointmentAdminNotification(nuevaCita);
     await sendAppointmentConfirmation(nuevaCita);
 
